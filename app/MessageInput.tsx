@@ -11,7 +11,7 @@ const formSchema = z.object({
   question: z.string().min(2).max(10000),
 });
 
-export default function MessageInput() {
+export default function MessageInput(props: { onSubmit: (input: string) => void }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -20,10 +20,10 @@ export default function MessageInput() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     console.log('==========handleSubmit==========');
-    console.log('서버에서 응답을 내려줍니다.');
+    props.onSubmit(values.question);
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

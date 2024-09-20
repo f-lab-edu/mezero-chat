@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -17,6 +18,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.439.0",
     "next": "14.2.9",
+    "openai": "^4.62.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",

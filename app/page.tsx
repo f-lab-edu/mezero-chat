@@ -1,9 +1,27 @@
 'use client';
 
+import { useState } from 'react';
+import { ChatService } from '@/business/ChatService';
+import { IChatParam } from '@/types/chat';
 import Header from '@/components/Header';
+import Chat from '@/components/Chat';
 import MessageInput from '@/app/MessageInput';
 
 export default function Home() {
+  const [chatList, setChatList] = useState<IChatParam['message'][]>([]);
+
+  const onSubmit = async (values: IChatParam['message']) => {
+    console.log('==========handleSubmit==========');
+
+    const response = await ChatService.getAnswer(values);
+
+    if (typeof response !== 'string') {
+      throw new Error('값이 없습니다.');
+    }
+
+    setChatList([...chatList, response]);
+  };
+
   return (
     <div className="grid h-screen w-full">
       <div className="flex flex-col">
@@ -11,6 +29,9 @@ export default function Home() {
         <main className="relative flex h-full min-h-[50vh] flex-col bg-white p-4 lg:col-span-2">
           <div className="flex-1 w-full max-w-2xl m-auto">
             <div className="space-y-4">
+              {chatList.map((chat, index) => (
+                <Chat key={index} message={chat}></Chat>
+              ))}
               {/* <div className="flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-primary-foreground">
                 내가 질문한 내용입니다.
               </div>
@@ -22,7 +43,7 @@ export default function Home() {
         </main>
         <div className="sticky bottom-0 w-full py-2 border-t bg-white">
           <div className="max-w-2xl m-auto">
-            <MessageInput />
+            <MessageInput onSubmit={onSubmit} />
           </div>
         </div>
       </div>
