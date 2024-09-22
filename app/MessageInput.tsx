@@ -20,8 +20,9 @@ export default function MessageInput(props: { onSubmit: (input: string) => void 
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('==========handleSubmit==========');
-    props.onSubmit(values.question);
+    const message = values.question.trim();
+    props.onSubmit(message);
+    form.reset();
   }
 
   return (

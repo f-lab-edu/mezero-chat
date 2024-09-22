@@ -8,10 +8,17 @@ import Chat from '@/components/Chat';
 import MessageInput from '@/app/MessageInput';
 
 export default function Home() {
-  const [chatList, setChatList] = useState<IChatParam['message'][]>([]);
+  const [chatList, setChatList] = useState<IChatParam[]>([]);
 
-  const onSubmit = async (values: IChatParam['message']) => {
+  const onSubmit = async (values: string) => {
     console.log('==========handleSubmit==========');
+    setChatList((prevChatList) => [
+      ...prevChatList,
+      {
+        role: 'user',
+        message: values,
+      },
+    ]);
 
     const response = await ChatService.getAnswer(values);
 
@@ -19,7 +26,13 @@ export default function Home() {
       throw new Error('값이 없습니다.');
     }
 
-    setChatList([...chatList, response]);
+    setChatList((prevChatList) => [
+      ...prevChatList,
+      {
+        role: 'assistant',
+        message: response,
+      },
+    ]);
   };
 
   return (
@@ -30,14 +43,8 @@ export default function Home() {
           <div className="flex-1 w-full max-w-2xl m-auto">
             <div className="space-y-4">
               {chatList.map((chat, index) => (
-                <Chat key={index} message={chat}></Chat>
+                <Chat key={index} message={chat.message} role={chat.role}></Chat>
               ))}
-              {/* <div className="flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-primary-foreground">
-                내가 질문한 내용입니다.
-              </div>
-              <div className="flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm mr-auto bg-muted">
-                Chat이 답변한 내용입니다.
-              </div> */}
             </div>
           </div>
         </main>
