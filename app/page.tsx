@@ -8,10 +8,12 @@ import Chat from '@/components/Chat';
 import MessageInput from '@/app/MessageInput';
 
 export default function Home() {
+  const [isTyping, setIsTyping] = useState(false);
   const [chatList, setChatList] = useState<IChatParam[]>([]);
 
   const onSubmit = async (values: string) => {
     console.log('==========handleSubmit==========');
+    setIsTyping(true);
     setChatList((prevChatList) => [
       ...prevChatList,
       {
@@ -21,11 +23,11 @@ export default function Home() {
     ]);
 
     const response = await ChatService.getAnswer(values);
+    setIsTyping(false);
 
     if (typeof response !== 'string') {
       throw new Error('값이 없습니다.');
     }
-
     setChatList((prevChatList) => [
       ...prevChatList,
       {
@@ -50,7 +52,7 @@ export default function Home() {
         </main>
         <div className="sticky bottom-0 w-full py-2 border-t bg-white">
           <div className="max-w-2xl m-auto">
-            <MessageInput onSubmit={onSubmit} />
+            <MessageInput onSubmit={onSubmit} isTyping={isTyping} />
           </div>
         </div>
       </div>

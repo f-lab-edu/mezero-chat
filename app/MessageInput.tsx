@@ -11,7 +11,7 @@ const formSchema = z.object({
   question: z.string().min(2).max(10000),
 });
 
-export default function MessageInput(props: { onSubmit: (input: string) => void }) {
+export default function MessageInput(props: { onSubmit: (input: string) => void; isTyping: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,12 +43,13 @@ export default function MessageInput(props: { onSubmit: (input: string) => void 
                       }
                     }}
                     {...field}
+                    disabled={props.isTyping}
                   />
                 </FormControl>
               </FormItem>
             )}
           />
-          <Button type="submit" variant="outline" size="icon">
+          <Button type="submit" variant="outline" size="icon" disabled={props.isTyping}>
             <Send className="h-4 w-4" />
           </Button>
         </div>
