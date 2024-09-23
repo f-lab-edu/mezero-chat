@@ -1,4 +1,4 @@
-import { ChatServiceRepository } from './ChatServiceRepository';
+import { ChatRepository } from '@/data/ChatRepository';
 
 export class ChatService {
   static returnLog() {
@@ -6,6 +6,6 @@ export class ChatService {
   }
 
   static async getAnswer(values: string) {
-    return await ChatServiceRepository.getAnswer(values);
+    return await ChatRepository.getAnswer(values);
   }
 }

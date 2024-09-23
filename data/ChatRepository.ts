@@ -1,21 +1,20 @@
 import OpenAI from 'openai';
-import { IChatParam } from '@/types/chat';
 
-export class ChatServiceRepository {
+export class ChatRepository {
   static returnLog() {
-    return 'ChatServiceRepositoryLog';
+    return 'ChatRepositoryLog';
   }
 
   static apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   static client = new OpenAI({
-    apiKey: ChatServiceRepository.apiKey,
+    apiKey: ChatRepository.apiKey,
     dangerouslyAllowBrowser: true,
   });
 
   static async getAnswer(values: string) {
     const question = values;
-    const chatCompletion = await ChatServiceRepository.client.chat.completions.create({
+    const chatCompletion = await ChatRepository.client.chat.completions.create({
       messages: [{ role: 'user', content: question }],
       model: 'gpt-3.5-turbo',
       max_tokens: 1024,
