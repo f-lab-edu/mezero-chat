@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChatService } from '@/business/ChatService';
+import { ChatLogService } from '@/business/ChatLogService';
 import { IChatParam } from '@/types/chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
@@ -22,7 +22,7 @@ export default function ChatPage() {
       },
     ]);
 
-    const response = await ChatService.getAnswer(values);
+    const response = await ChatLogService.getAnswer(values);
     setIsTyping(false);
 
     if (typeof response !== 'string') {

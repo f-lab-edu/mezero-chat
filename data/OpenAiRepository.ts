@@ -1,20 +1,20 @@
 import OpenAI from 'openai';
 
-export class ChatRepository {
+export class OpenAiRepository {
   static returnLog() {
-    return 'ChatRepositoryLog';
+    return 'OpenAiRepositoryLog';
   }
 
   static apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   static client = new OpenAI({
-    apiKey: ChatRepository.apiKey,
+    apiKey: OpenAiRepository.apiKey,
     dangerouslyAllowBrowser: true,
   });
 
   static async getAnswer(values: string) {
     const question = values;
-    const chatCompletion = await ChatRepository.client.chat.completions.create({
+    const chatCompletion = await OpenAiRepository.client.chat.completions.create({
       messages: [{ role: 'user', content: question }],
       model: 'gpt-3.5-turbo',
       max_tokens: 1024,
