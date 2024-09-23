@@ -5,7 +5,7 @@ import { ChatService } from '@/business/ChatService';
 import { IChatParam } from '@/types/chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
-import ChatMessageInput from '@/app/ChatMessageInput';
+import ChatMessageInput from '@/components/ChatMessageInput';
 
 export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
