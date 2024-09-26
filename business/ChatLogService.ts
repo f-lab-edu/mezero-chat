@@ -1,8 +1,8 @@
 import { OpenAiRepository } from '@/data/OpenAiRepository';
-import { IChatParam } from '@/types/chat';
+import { IOpenAiParam } from '@/types/OpenAiParam';
 
 export class ChatLogService {
-  public async getAnswer(chatLogList: IChatParam[]) {
+  public static async getAnswer(chatLogList: IOpenAiParam[]) {
     return await OpenAiRepository.getAnswer(chatLogList);
   }
 }
