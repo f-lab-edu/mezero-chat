@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChatLogService } from '@/business/ChatLogService';
+import { ChatLogService } from '@/business/ChatLogService.1';
 import { IChatParam } from '@/types/chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
@@ -9,32 +9,29 @@ import ChatMessageInput from '@/components/ChatMessageInput';
 
 export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
-  const [chatList, setChatList] = useState<IChatParam[]>([]);
+  const [chatLogList, setChatLogList] = useState<IChatParam[]>([]);
 
-  const onSubmit = async (values: string) => {
+  const onSubmit = async (chatLog: string) => {
     console.log('==========handleSubmit==========');
     setIsTyping(true);
-    setChatList((prevChatList) => [
-      ...prevChatList,
-      {
-        role: 'user',
-        message: values,
-      },
-    ]);
 
-    const response = await ChatLogService.getAnswer(values);
+    const userChat: IChatParam[] = [...chatLogList, { role: 'user', content: chatLog }];
+
+    const response = await ChatLogService.getAnswer(userChat);
     setIsTyping(false);
 
     if (typeof response !== 'string') {
       throw new Error('값이 없습니다.');
     }
-    setChatList((prevChatList) => [
-      ...prevChatList,
+
+    const assistantChat: IChatParam[] = [
+      ...userChat,
       {
         role: 'assistant',
-        message: response,
+        content: response,
       },
-    ]);
+    ];
+    setChatLogList(assistantChat);
   };
 
   return (
@@ -44,8 +41,8 @@ export default function ChatPage() {
         <main className="relative flex h-full min-h-[50vh] flex-col bg-white p-4 lg:col-span-2">
           <div className="flex-1 w-full max-w-2xl m-auto">
             <div className="space-y-4">
-              {chatList.map((chat, index) => (
-                <Chat key={index} message={chat.message} role={chat.role}></Chat>
+              {chatLogList.map((chat, index) => (
+                <Chat key={chat.content} role={chat.role} content={chat.content}></Chat>
               ))}
             </div>
           </div>

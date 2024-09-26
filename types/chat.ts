@@ -1,4 +1,5 @@
 export interface IChatParam {
-  message: string;
-  role: string;
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+  name?: string;
 }
