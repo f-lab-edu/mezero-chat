@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ChatLogService } from '@/business/ChatLogService';
-import { IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
+import { OpenAiRole, IOpenAiParam } from '@/types/OpenAiParam';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatMessageInput from '@/components/ChatMessageInput';
@@ -20,10 +20,6 @@ export default function ChatPage() {
 
     const response = await ChatLogService.getAnswer(userChat);
     setIsTyping(false);
-
-    if (typeof response !== 'string') {
-      throw new Error('값이 없습니다.');
-    }
 
     const assistantChat: IOpenAiParam[] = [
       ...userChat,
