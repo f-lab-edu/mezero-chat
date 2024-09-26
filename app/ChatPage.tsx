@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChatLogService } from '@/business/ChatLogService.1';
+import { ChatLogService } from '@/business/ChatLogService';
 import { IChatParam } from '@/types/chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
@@ -16,6 +16,7 @@ export default function ChatPage() {
     setIsTyping(true);
 
     const userChat: IChatParam[] = [...chatLogList, { role: 'user', content: chatLog }];
+    setChatLogList(userChat);
 
     const response = await ChatLogService.getAnswer(userChat);
     setIsTyping(false);
