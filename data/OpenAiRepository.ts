@@ -7,10 +7,10 @@ export class OpenAiRepository {
     dangerouslyAllowBrowser: true,
   });
 
-  public static async getAnswer(chatLogList: IOpenAiParam[]): Promise<string | undefined> {
+  async getAnswer(chatLogList: IOpenAiParam[]) {
     console.log(chatLogList);
     try {
-      const chatCompletion = await this.client.chat.completions.create({
+      const chatCompletion = await OpenAiRepository.client.chat.completions.create({
         messages: chatLogList,
         model: 'gpt-3.5-turbo',
         max_tokens: 1024,

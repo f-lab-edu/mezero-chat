@@ -18,7 +18,8 @@ export default function ChatPage() {
     const userChat: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: chatLog }];
     setChatLogList(userChat);
 
-    const response = await ChatLogService.getAnswer(userChat);
+    const chatLogService = new ChatLogService();
+    const response = await chatLogService.getAnswer(userChat);
     setIsTyping(false);
 
     const assistantChat: IOpenAiParam[] = [
