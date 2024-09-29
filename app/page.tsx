@@ -1,5 +1,5 @@
-import ChatPage from '@/app/ChatPage';
+import ChatDetailPage from '@/app/ChatDetailPage';
 
 export default function Home() {
-  return <ChatPage />;
+  return <ChatDetailPage />;
 }
