@@ -2,14 +2,48 @@
 
 import { useState } from 'react';
 import Header from '@/components/Header';
+import { v4 } from 'uuid';
+
 import ChatMessageInput from '@/components/ChatMessageInput';
+import { useRouter } from 'next/navigation';
+import { ChatLogService } from '@/business/ChatLogService';
+import { IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
 
 export default function ChatPage() {
-  const [isTyping, setIsTyping] = useState(false);
+  const [chatLogList, setChatLogList] = useState<IOpenAiParam[]>([]);
+  const router = useRouter();
+  const displayId = v4();
+  const chatData = {
+    id: 1,
+    displayId: displayId,
+    chatLogList: [
+      {
+        role: '',
+        content: '',
+      },
+    ],
+  };
 
   const onSubmit = async (chatLog: string) => {
     console.log('==========handleSubmit==========');
-    console.log(chatLog);
+    const userChat: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: chatLog }];
+
+    const chatLogService = new ChatLogService();
+    const response = await chatLogService.getAnswer(userChat);
+
+    const saveChatData = {
+      ...chatData,
+      chatLogList: response,
+    };
+
+    //- todo : Find id when there are multiple chats
+    localStorage.removeItem('chatList');
+    if (localStorage.getItem('chatList') === null) {
+      localStorage.setItem('chatList', JSON.stringify(saveChatData));
+    }
+
+    console.log(localStorage);
+    router.push('/chat/' + chatData.displayId);
   };
 
   return (
@@ -24,7 +58,7 @@ export default function ChatPage() {
               </h2>
               <div className="w-full bg-white border p-5 rounded-2xl">
                 <div className="max-w-2xl m-auto">
-                  <ChatMessageInput onSubmit={onSubmit} isTyping={isTyping} />
+                  <ChatMessageInput onSubmit={onSubmit} />
                 </div>
               </div>
             </div>

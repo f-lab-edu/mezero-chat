@@ -1,36 +1,65 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChatLogService } from '@/business/ChatLogService';
 import { OpenAiRole, IOpenAiParam } from '@/types/OpenAiParam';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatMessageInput from '@/components/ChatMessageInput';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ChatDetailPage() {
+  const pathname = usePathname();
   const [isTyping, setIsTyping] = useState(false);
   const [chatLogList, setChatLogList] = useState<IOpenAiParam[]>([]);
+  const chatData = {
+    id: 1,
+    displayId: 'displayId',
+    chatLogList: [
+      {
+        role: '',
+        content: '',
+      },
+    ],
+  };
+
+  const getHistoryChatLog = () => {
+    const storedChatList = localStorage.getItem('chatList');
+    const chatList = storedChatList !== null ? JSON.parse(storedChatList) : {};
+
+    if (Object.keys(chatList).length > 0) {
+      setChatLogList(chatList.chatLogList);
+    }
+  };
+
+  const setHistoryChatLog = (pChatLogList: IOpenAiParam[]) => {
+    if (localStorage.getItem('chatList') !== null) {
+      const saveChatData = {
+        ...chatData,
+        displayId: pathname.split('/')[2],
+        chatLogList: pChatLogList,
+      };
+      localStorage.setItem('chatList', JSON.stringify(saveChatData));
+    }
+  };
 
   const onSubmit = async (chatLog: string) => {
     console.log('==========handleSubmit==========');
-    setIsTyping(true);
-
     const userChat: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: chatLog }];
+    setIsTyping(true);
     setChatLogList(userChat);
+    setHistoryChatLog(userChat);
 
     const chatLogService = new ChatLogService();
     const response = await chatLogService.getAnswer(userChat);
     setIsTyping(false);
-
-    const assistantChat: IOpenAiParam[] = [
-      ...userChat,
-      {
-        role: OpenAiRole.assistant,
-        content: response,
-      },
-    ];
-    setChatLogList(assistantChat);
+    setChatLogList(response);
+    setHistoryChatLog(response);
   };
+
+  useEffect(() => {
+    getHistoryChatLog();
+  }, []);
 
   return (
     <div className="grid h-screen w-full">
