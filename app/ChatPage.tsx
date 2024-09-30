@@ -5,7 +5,7 @@ import { ChatLogService } from '@/business/ChatLogService';
 import { OpenAiRole, IOpenAiParam } from '@/types/OpenAiParam';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
-import ChatMessageInput from '@/components/ChatMessageInput';
+import ChatLogMessageInput from '@/components/ChatLogMessageInput';
 
 export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
@@ -47,7 +47,7 @@ export default function ChatPage() {
         </main>
         <div className="sticky bottom-0 w-full py-2 border-t bg-white">
           <div className="max-w-2xl m-auto">
-            <ChatMessageInput onSubmit={onSubmit} isTyping={isTyping} />
+            <ChatLogMessageInput onSubmit={onSubmit} isTyping={isTyping} />
           </div>
         </div>
       </div>
