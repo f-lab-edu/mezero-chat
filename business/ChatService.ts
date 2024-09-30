@@ -1,7 +1,7 @@
 import { OpenAiRepository } from '@/data/OpenAiRepository';
 import { IChatLogParam } from '@/types/ChatLogParam';
 
-export class ChatLogService {
+export class ChatService {
   private openAiRepository: OpenAiRepository;
 
   constructor() {
