@@ -1,5 +1,5 @@
 import { OpenAiRepository } from '@/data/OpenAiRepository';
-import { IOpenAiParam } from '@/types/OpenAiParam';
+import { IChatLogParam } from '@/types/ChatLogParam';
 
 export class ChatLogService {
   private openAiRepository: OpenAiRepository;
@@ -8,7 +8,7 @@ export class ChatLogService {
     this.openAiRepository = new OpenAiRepository();
   }
 
-  async getAnswer(chatLogList: IOpenAiParam[]) {
+  async getAnswer(chatLogList: IChatLogParam[]) {
     const response = await this.openAiRepository.getAnswer(chatLogList);
     if (typeof response !== 'string') {
       throw new Error('값이 없습니다.');

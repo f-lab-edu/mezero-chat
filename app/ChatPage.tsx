@@ -2,30 +2,30 @@
 
 import { useState } from 'react';
 import { ChatLogService } from '@/business/ChatLogService';
-import { OpenAiRole, IOpenAiParam } from '@/types/OpenAiParam';
+import { ChatLogRole, IChatLogParam } from '@/types/ChatLogParam';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatLogMessageInput from '@/components/ChatLogMessageInput';
 
 export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
-  const [chatLogList, setChatLogList] = useState<IOpenAiParam[]>([]);
+  const [chatLogList, setChatLogList] = useState<IChatLogParam[]>([]);
 
   const onSubmit = async (chatLog: string) => {
     console.log('==========handleSubmit==========');
     setIsTyping(true);
 
-    const userChat: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: chatLog }];
+    const userChat: IChatLogParam[] = [...chatLogList, { role: ChatLogRole.user, content: chatLog }];
     setChatLogList(userChat);
 
     const chatLogService = new ChatLogService();
     const response = await chatLogService.getAnswer(userChat);
     setIsTyping(false);
 
-    const assistantChat: IOpenAiParam[] = [
+    const assistantChat: IChatLogParam[] = [
       ...userChat,
       {
-        role: OpenAiRole.assistant,
+        role: ChatLogRole.assistant,
         content: response,
       },
     ];

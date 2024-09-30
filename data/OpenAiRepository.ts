@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { IOpenAiParam } from '@/types/OpenAiParam';
+import { IChatLogParam } from '@/types/ChatLogParam';
 
 export class OpenAiRepository {
   static client = new OpenAI({
@@ -7,7 +7,7 @@ export class OpenAiRepository {
     dangerouslyAllowBrowser: true,
   });
 
-  async getAnswer(chatLogList: IOpenAiParam[]) {
+  async getAnswer(chatLogList: IChatLogParam[]) {
     console.log(chatLogList);
     try {
       const chatCompletion = await OpenAiRepository.client.chat.completions.create({
