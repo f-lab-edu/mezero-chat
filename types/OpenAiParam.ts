@@ -9,3 +9,9 @@ export interface IOpenAiParam {
   content: string;
   name?: string;
 }
+
+export interface IChat {
+  id: number;
+  displayId: string;
+  chatLogList: IOpenAiParam[];
+}

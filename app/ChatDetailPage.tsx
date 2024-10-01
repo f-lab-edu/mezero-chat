@@ -1,64 +1,45 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { ChatLogService } from '@/business/ChatLogService';
 import { OpenAiRole, IOpenAiParam } from '@/types/OpenAiParam';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatMessageInput from '@/components/ChatMessageInput';
-import { usePathname, useRouter } from 'next/navigation';
 
 export default function ChatDetailPage() {
   const pathname = usePathname();
+  const displayId = pathname.split('/')[2];
+
   const [isTyping, setIsTyping] = useState(false);
   const [chatLogList, setChatLogList] = useState<IOpenAiParam[]>([]);
-  const chatData = {
-    id: 1,
-    displayId: 'displayId',
-    chatLogList: [
-      {
-        role: '',
-        content: '',
-      },
-    ],
-  };
 
-  const getHistoryChatLog = () => {
-    const storedChatList = localStorage.getItem('chatList');
-    const chatList = storedChatList !== null ? JSON.parse(storedChatList) : {};
+  const chatLogService = new ChatLogService();
+  const chatList = chatLogService.getStoredChatList();
+  const currentChat = chatList.filter((chat) => chat.displayId === displayId);
 
-    if (Object.keys(chatList).length > 0) {
-      setChatLogList(chatList.chatLogList);
+  const initChat = () => {
+    if (currentChat.length > 0) {
+      setChatLogList(currentChat[0].chatLogList);
     }
   };
 
-  const setHistoryChatLog = (pChatLogList: IOpenAiParam[]) => {
-    if (localStorage.getItem('chatList') !== null) {
-      const saveChatData = {
-        ...chatData,
-        displayId: pathname.split('/')[2],
-        chatLogList: pChatLogList,
-      };
-      localStorage.setItem('chatList', JSON.stringify(saveChatData));
-    }
-  };
-
-  const onSubmit = async (chatLog: string) => {
+  //- todo: move to logic service
+  const onSubmit = async (pChatLog: string) => {
     console.log('==========handleSubmit==========');
-    const userChat: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: chatLog }];
+    const questionChatLogList: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: pChatLog }];
     setIsTyping(true);
-    setChatLogList(userChat);
-    setHistoryChatLog(userChat);
+    setChatLogList(questionChatLogList);
 
     const chatLogService = new ChatLogService();
-    const response = await chatLogService.getAnswer(userChat);
+    const response = await chatLogService.getAnswer(questionChatLogList);
     setIsTyping(false);
     setChatLogList(response);
-    setHistoryChatLog(response);
   };
 
   useEffect(() => {
-    getHistoryChatLog();
+    initChat();
   }, []);
 
   return (

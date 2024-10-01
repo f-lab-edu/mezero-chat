@@ -1,49 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import Header from '@/components/Header';
-import { v4 } from 'uuid';
-
-import ChatMessageInput from '@/components/ChatMessageInput';
 import { useRouter } from 'next/navigation';
 import { ChatLogService } from '@/business/ChatLogService';
-import { IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
+import Header from '@/components/Header';
+import ChatMessageInput from '@/components/ChatMessageInput';
 
 export default function ChatPage() {
-  const [chatLogList, setChatLogList] = useState<IOpenAiParam[]>([]);
   const router = useRouter();
-  const displayId = v4();
-  const chatData = {
-    id: 1,
-    displayId: displayId,
-    chatLogList: [
-      {
-        role: '',
-        content: '',
-      },
-    ],
+
+  const createChat = (pChatLog: string) => {
+    const chatLogService = new ChatLogService();
+    return chatLogService.createChat(pChatLog);
   };
 
-  const onSubmit = async (chatLog: string) => {
-    console.log('==========handleSubmit==========');
-    const userChat: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: chatLog }];
-
-    const chatLogService = new ChatLogService();
-    const response = await chatLogService.getAnswer(userChat);
-
-    const saveChatData = {
-      ...chatData,
-      chatLogList: response,
-    };
-
-    //- todo : Find id when there are multiple chats
-    localStorage.removeItem('chatList');
-    if (localStorage.getItem('chatList') === null) {
-      localStorage.setItem('chatList', JSON.stringify(saveChatData));
-    }
-
-    console.log(localStorage);
-    router.push('/chat/' + chatData.displayId);
+  const onSubmit = async (pChatLog: string) => {
+    const displayId = createChat(pChatLog);
+    router.push('/chat/' + displayId);
   };
 
   return (

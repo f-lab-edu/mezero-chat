@@ -1,11 +1,48 @@
 import OpenAI from 'openai';
-import { IOpenAiParam } from '@/types/OpenAiParam';
+import { IChat, IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
+import { v4 } from 'uuid';
 
 export class OpenAiRepository {
   static client = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
+
+  getStoredChatList() {
+    const storedChatList = localStorage.getItem('chatList');
+    const chatList: IChat[] = storedChatList ? JSON.parse(storedChatList) : [];
+    return chatList;
+  }
+
+  getStoredLastChat() {
+    const chatList = this.getStoredChatList();
+    const lastChat = chatList.pop() || null;
+    return lastChat;
+  }
+
+  getStoredLastId() {
+    const chatList = this.getStoredChatList();
+    const lastId = chatList.map((chat) => chat.id).pop() || 0;
+    return lastId;
+  }
+
+  setStoredChatList(pChat: IChat) {
+    const saveChatList = [...this.getStoredChatList(), pChat];
+    localStorage.setItem('chatList', JSON.stringify(saveChatList));
+    return true;
+  }
+
+  createChat(pChatLog: string) {
+    const id = this.getStoredLastId() + 1;
+    const displayId = v4();
+    const newChat: IChat = {
+      id: id,
+      displayId: displayId,
+      chatLogList: [{ role: OpenAiRole.user, content: pChatLog }],
+    };
+    this.setStoredChatList(newChat);
+    return displayId;
+  }
 
   async getAnswer(chatLogList: IOpenAiParam[]) {
     console.log(chatLogList);

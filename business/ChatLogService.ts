@@ -1,11 +1,23 @@
 import { OpenAiRepository } from '@/data/OpenAiRepository';
-import { IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
+import { IChat, IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
 
 export class ChatLogService {
   private openAiRepository: OpenAiRepository;
 
   constructor() {
     this.openAiRepository = new OpenAiRepository();
+  }
+
+  getStoredChatList() {
+    return this.openAiRepository.getStoredChatList();
+  }
+
+  setStoredChatList(pChatLogList: IChat) {
+    return this.openAiRepository.setStoredChatList(pChatLogList);
+  }
+
+  createChat(pChatLog: string) {
+    return this.openAiRepository.createChat(pChatLog);
   }
 
   async getAnswer(chatLogList: IOpenAiParam[]) {
