@@ -8,8 +8,8 @@ export class ChatService {
     this.openAiRepository = new OpenAiRepository();
   }
 
-  getStoredChatList() {
-    return this.openAiRepository.getStoredChatList();
+  getChatList() {
+    return this.openAiRepository.getChatList();
   }
 
   setStoredChatList(pChatLogList: IChat) {

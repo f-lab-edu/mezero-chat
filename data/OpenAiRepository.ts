@@ -8,26 +8,26 @@ export class OpenAiRepository {
     dangerouslyAllowBrowser: true,
   });
 
-  getStoredChatList() {
+  getChatList() {
     const storedChatList = localStorage.getItem('chatList');
     const chatList: IChat[] = storedChatList ? JSON.parse(storedChatList) : [];
     return chatList;
   }
 
   getStoredLastChat() {
-    const chatList = this.getStoredChatList();
+    const chatList = this.getChatList();
     const lastChat = chatList.pop() || null;
     return lastChat;
   }
 
   getStoredLastId() {
-    const chatList = this.getStoredChatList();
+    const chatList = this.getChatList();
     const lastId = chatList.map((chat) => chat.id).pop() || 0;
     return lastId;
   }
 
   setStoredChatList(pChat: IChat) {
-    const saveChatList = [...this.getStoredChatList(), pChat];
+    const saveChatList = [...this.getChatList(), pChat];
     localStorage.setItem('chatList', JSON.stringify(saveChatList));
     return true;
   }

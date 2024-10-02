@@ -15,8 +15,8 @@ export default function ChatDetailPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
-  const chatLogService = new ChatService();
-  const chatList = chatLogService.getStoredChatList();
+  const chatService = new ChatService();
+  const chatList = chatService.getChatList();
   const currentChat = chatList.filter((chat) => chat.displayId === displayId);
 
   const initChat = () => {
