@@ -1,0 +1,18 @@
+import { OpenAiRepository } from '@/data/OpenAiRepository';
+import { IChatLogParam } from '@/types/ChatLogParam';
+
+export class ChatService {
+  private openAiRepository: OpenAiRepository;
+
+  constructor() {
+    this.openAiRepository = new OpenAiRepository();
+  }
+
+  async getAnswer(chatLogList: IChatLogParam[]) {
+    const response = await this.openAiRepository.getAnswer(chatLogList);
+    if (typeof response !== 'string') {
+      throw new Error('값이 없습니다.');
+    }
+    return response;
+  }
+}

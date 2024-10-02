@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { IChatParam } from '@/types/chat';
+import { IChatLogParam } from '@/types/ChatLogParam';
 
 export class OpenAiRepository {
   static client = new OpenAI({
@@ -7,10 +7,10 @@ export class OpenAiRepository {
     dangerouslyAllowBrowser: true,
   });
 
-  public static async getAnswer(chatLogList: IChatParam[]): Promise<string | undefined> {
+  async getAnswer(chatLogList: IChatLogParam[]) {
     console.log(chatLogList);
     try {
-      const chatCompletion = await this.client.chat.completions.create({
+      const chatCompletion = await OpenAiRepository.client.chat.completions.create({
         messages: chatLogList,
         model: 'gpt-3.5-turbo',
         max_tokens: 1024,
