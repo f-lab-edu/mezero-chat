@@ -1,3 +1,5 @@
+import ChatPage from '@/app/ChatPage';
+
 export default function Home() {
-  return <div>Hello World</div>;
+  return <ChatPage />;
 }
