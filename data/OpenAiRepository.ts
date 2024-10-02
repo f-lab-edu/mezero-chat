@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { IChat, IOpenAiParam, OpenAiRole } from '@/types/OpenAiParam';
+import { IChat, IChatLogParam, ChatLogRole } from '@/types/ChatLogParam';
 import { v4 } from 'uuid';
 
 export class OpenAiRepository {
@@ -38,13 +38,13 @@ export class OpenAiRepository {
     const newChat: IChat = {
       id: id,
       displayId: displayId,
-      chatLogList: [{ role: OpenAiRole.user, content: pChatLog }],
+      chatLogList: [{ role: ChatLogRole.user, content: pChatLog }],
     };
     this.setStoredChatList(newChat);
     return displayId;
   }
 
-  async getAnswer(chatLogList: IOpenAiParam[]) {
+  async getAnswer(chatLogList: IChatLogParam[]) {
     console.log(chatLogList);
     try {
       const chatCompletion = await OpenAiRepository.client.chat.completions.create({

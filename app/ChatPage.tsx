@@ -1,16 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ChatLogService } from '@/business/ChatLogService';
+import { ChatService } from '@/business/ChatService';
 import Header from '@/components/Header';
-import ChatMessageInput from '@/components/ChatMessageInput';
+import ChatLogMessageInput from '@/components/ChatLogMessageInput';
 
 export default function ChatPage() {
   const router = useRouter();
 
   const createChat = (pChatLog: string) => {
-    const chatLogService = new ChatLogService();
-    return chatLogService.createChat(pChatLog);
+    const chatService = new ChatService();
+    return chatService.createChat(pChatLog);
   };
 
   const onSubmit = async (pChatLog: string) => {
@@ -30,7 +30,7 @@ export default function ChatPage() {
               </h2>
               <div className="w-full bg-white border p-5 rounded-2xl">
                 <div className="max-w-2xl m-auto">
-                  <ChatMessageInput onSubmit={onSubmit} />
+                  <ChatLogMessageInput onSubmit={onSubmit} />
                 </div>
               </div>
             </div>

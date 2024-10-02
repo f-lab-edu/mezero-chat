@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { ChatLogService } from '@/business/ChatLogService';
-import { OpenAiRole, IOpenAiParam } from '@/types/OpenAiParam';
+import { ChatService } from '@/business/ChatService';
+import { ChatLogRole, IChatLogParam } from '@/types/ChatLogParam';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
-import ChatMessageInput from '@/components/ChatMessageInput';
+import ChatLogMessageInput from '@/components/ChatLogMessageInput';
 
 export default function ChatDetailPage() {
   const pathname = usePathname();
   const displayId = pathname.split('/')[2];
 
   const [isTyping, setIsTyping] = useState(false);
-  const [chatLogList, setChatLogList] = useState<IOpenAiParam[]>([]);
+  const [chatLogList, setChatLogList] = useState<IChatLogParam[]>([]);
 
-  const chatLogService = new ChatLogService();
+  const chatLogService = new ChatService();
   const chatList = chatLogService.getStoredChatList();
   const currentChat = chatList.filter((chat) => chat.displayId === displayId);
 
@@ -28,12 +28,12 @@ export default function ChatDetailPage() {
   //- todo: move to logic service
   const onSubmit = async (pChatLog: string) => {
     console.log('==========handleSubmit==========');
-    const questionChatLogList: IOpenAiParam[] = [...chatLogList, { role: OpenAiRole.user, content: pChatLog }];
+    const questionChatLogList: IChatLogParam[] = [...chatLogList, { role: ChatLogRole.user, content: pChatLog }];
     setIsTyping(true);
     setChatLogList(questionChatLogList);
 
-    const chatLogService = new ChatLogService();
-    const response = await chatLogService.getAnswer(questionChatLogList);
+    const chatService = new ChatService();
+    const response = await chatService.getAnswer(questionChatLogList);
     setIsTyping(false);
     setChatLogList(response);
   };
@@ -57,7 +57,7 @@ export default function ChatDetailPage() {
         </main>
         <div className="sticky bottom-0 w-full py-2 border-t bg-white">
           <div className="max-w-2xl m-auto">
-            <ChatMessageInput onSubmit={onSubmit} isTyping={isTyping} />
+            <ChatLogMessageInput onSubmit={onSubmit} isTyping={isTyping} />
           </div>
         </div>
       </div>

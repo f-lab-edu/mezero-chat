@@ -1,11 +1,11 @@
-export enum OpenAiRole {
+export enum ChatLogRole {
   system = 'system',
   user = 'user',
   assistant = 'assistant',
 }
 
-export interface IOpenAiParam {
-  role: OpenAiRole.system | OpenAiRole.user | OpenAiRole.assistant;
+export interface IChatLogParam {
+  role: ChatLogRole.system | ChatLogRole.user | ChatLogRole.assistant;
   content: string;
   name?: string;
 }
@@ -13,5 +13,5 @@ export interface IOpenAiParam {
 export interface IChat {
   id: number;
   displayId: string;
-  chatLogList: IOpenAiParam[];
+  chatLogList: IChatLogParam[];
 }

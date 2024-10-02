@@ -11,7 +11,7 @@ const formSchema = z.object({
   question: z.string().min(2).max(10000),
 });
 
-export default function ChatMessageInput(props: { onSubmit: (input: string) => void; isTyping?: boolean }) {
+export default function ChatLogMessageInput(props: { onSubmit: (input: string) => void; isTyping?: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
