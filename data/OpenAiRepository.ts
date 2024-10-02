@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { IChat, IChatLogParam, ChatLogRole } from '@/types/ChatLogParam';
+import { IChat, IChatLog, ChatLogRole } from '@/types/ChatLogParam';
 import { v4 } from 'uuid';
 
 export class OpenAiRepository {
@@ -44,7 +44,7 @@ export class OpenAiRepository {
     return displayId;
   }
 
-  async getAnswer(chatLogList: IChatLogParam[]) {
+  async getAnswer(chatLogList: IChatLog[]) {
     console.log(chatLogList);
     try {
       const chatCompletion = await OpenAiRepository.client.chat.completions.create({

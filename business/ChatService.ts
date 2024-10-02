@@ -1,5 +1,5 @@
 import { OpenAiRepository } from '@/data/OpenAiRepository';
-import { IChat, IChatLogParam, ChatLogRole } from '@/types/ChatLogParam';
+import { IChat, IChatLog, ChatLogRole } from '@/types/ChatLogParam';
 
 export class ChatService {
   private openAiRepository: OpenAiRepository;
@@ -20,14 +20,14 @@ export class ChatService {
     return this.openAiRepository.createChat(pChatLog);
   }
 
-  async getAnswer(chatLogList: IChatLogParam[]) {
+  async getAnswer(chatLogList: IChatLog[]) {
     const response = await this.openAiRepository.getAnswer(chatLogList);
 
     if (typeof response !== 'string') {
       throw new Error('값이 없습니다.');
     }
 
-    const answerChat: IChatLogParam[] = [
+    const answerChat: IChatLog[] = [
       ...chatLogList,
       {
         role: ChatLogRole.assistant,
