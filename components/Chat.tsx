@@ -1,4 +1,4 @@
-import { ChatLogRole, IChatLog } from '@/types/ChatLogParam';
+import { ChatLogRole, IChatLog } from '@/types/Chat';
 
 export default function Chat({ role, content }: IChatLog) {
   return (

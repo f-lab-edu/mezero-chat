@@ -1,5 +1,5 @@
 import { OpenAiRepository } from '@/data/OpenAiRepository';
-import { IChat, IChatLog, ChatLogRole } from '@/types/ChatLogParam';
+import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 
 export class ChatService {
   private openAiRepository: OpenAiRepository;

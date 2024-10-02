@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { ChatService } from '@/business/ChatService';
-import { ChatLogRole, IChatLog } from '@/types/ChatLogParam';
+import { ChatLogRole, IChatLog } from '@/types/Chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatLogMessageInput from '@/components/ChatLogMessageInput';

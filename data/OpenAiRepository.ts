@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { IChat, IChatLog, ChatLogRole } from '@/types/ChatLogParam';
+import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import { v4 } from 'uuid';
 
 export class OpenAiRepository {
