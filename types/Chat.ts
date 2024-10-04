@@ -4,7 +4,7 @@ export interface IChat {
 }
 
 export interface IChatLog {
-  role: ChatLogRole.system | ChatLogRole.user | ChatLogRole.assistant;
+  role: ChatLogRole;
   content: string;
   name?: string;
 }
