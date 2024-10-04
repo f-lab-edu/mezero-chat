@@ -8,31 +8,31 @@ export class OpenAiRepository {
     dangerouslyAllowBrowser: true,
   });
 
-  getChatList() {
+  getChatList(): IChat[] {
     const ChatList = localStorage.getItem('chatList');
     const chatList: IChat[] = ChatList ? JSON.parse(ChatList) : [];
     return chatList;
   }
 
-  getLastChat() {
+  getLastChat(): IChat | null {
     const chatList = this.getChatList();
     const lastChat = chatList.pop() || null;
     return lastChat;
   }
 
-  getLastId() {
+  getLastId(): IChat['id'] {
     const chatList = this.getChatList();
     const lastId = chatList.map((chat) => chat.id).pop() || 0;
     return lastId;
   }
 
-  setChatList(pChat: IChat) {
+  setChatList(pChat: IChat): boolean {
     const saveChatList = [...this.getChatList(), pChat];
     localStorage.setItem('chatList', JSON.stringify(saveChatList));
     return true;
   }
 
-  createChat(pChatLogContent: IChatLog['content']) {
+  createChat(pChatLogContent: IChatLog['content']): IChat['displayId'] {
     const id = this.getLastId() + 1;
     const displayId = v4();
     const newChat: IChat = {
@@ -44,7 +44,7 @@ export class OpenAiRepository {
     return displayId;
   }
 
-  async getAnswer(chatLogList: IChatLog[]) {
+  async getAnswer(chatLogList: IChatLog[]): Promise<string | undefined> {
     console.log(chatLogList);
     try {
       const chatCompletion = await OpenAiRepository.client.chat.completions.create({

@@ -8,19 +8,19 @@ export class ChatService {
     this.openAiRepository = new OpenAiRepository();
   }
 
-  getChatList() {
+  getChatList(): IChat[] {
     return this.openAiRepository.getChatList();
   }
 
-  setChatList(pChatLogList: IChat) {
+  setChatList(pChatLogList: IChat): boolean {
     return this.openAiRepository.setChatList(pChatLogList);
   }
 
-  createChat(pChatLogContent: IChatLog['content']) {
+  createChat(pChatLogContent: IChatLog['content']): IChat['displayId'] {
     return this.openAiRepository.createChat(pChatLogContent);
   }
 
-  async getAnswer(chatLogList: IChatLog[]) {
+  async getAnswer(chatLogList: IChatLog[]): Promise<IChatLog[]> {
     const response = await this.openAiRepository.getAnswer(chatLogList);
 
     if (typeof response !== 'string') {
