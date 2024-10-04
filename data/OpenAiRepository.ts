@@ -9,38 +9,38 @@ export class OpenAiRepository {
   });
 
   getChatList() {
-    const storedChatList = localStorage.getItem('chatList');
-    const chatList: IChat[] = storedChatList ? JSON.parse(storedChatList) : [];
+    const ChatList = localStorage.getItem('chatList');
+    const chatList: IChat[] = ChatList ? JSON.parse(ChatList) : [];
     return chatList;
   }
 
-  getStoredLastChat() {
+  getLastChat() {
     const chatList = this.getChatList();
     const lastChat = chatList.pop() || null;
     return lastChat;
   }
 
-  getStoredLastId() {
+  getLastId() {
     const chatList = this.getChatList();
     const lastId = chatList.map((chat) => chat.id).pop() || 0;
     return lastId;
   }
 
-  setStoredChatList(pChat: IChat) {
+  setChatList(pChat: IChat) {
     const saveChatList = [...this.getChatList(), pChat];
     localStorage.setItem('chatList', JSON.stringify(saveChatList));
     return true;
   }
 
   createChat(pChatLogContent: IChatLog['content']) {
-    const id = this.getStoredLastId() + 1;
+    const id = this.getLastId() + 1;
     const displayId = v4();
     const newChat: IChat = {
       id: id,
       displayId: displayId,
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.setStoredChatList(newChat);
+    this.setChatList(newChat);
     return displayId;
   }
 

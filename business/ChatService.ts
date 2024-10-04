@@ -12,8 +12,8 @@ export class ChatService {
     return this.openAiRepository.getChatList();
   }
 
-  setStoredChatList(pChatLogList: IChat) {
-    return this.openAiRepository.setStoredChatList(pChatLogList);
+  setChatList(pChatLogList: IChat) {
+    return this.openAiRepository.setChatList(pChatLogList);
   }
 
   createChat(pChatLogContent: IChatLog['content']) {
