@@ -12,10 +12,6 @@ export class ChatService {
     return this.GptRepository.getChatList();
   }
 
-  setChat(pChatLogList: IChat): boolean {
-    return this.GptRepository.setChat(pChatLogList);
-  }
-
   createChat(pChatLogContent: string): IChat['id'] {
     return this.GptRepository.createChat(pChatLogContent);
   }

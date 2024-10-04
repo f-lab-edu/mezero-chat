@@ -20,9 +20,9 @@ export class GptRepository {
     return lastChat;
   }
 
-  setChat(pChat: IChat): boolean {
-    const saveChatList = [...this.getChatList(), pChat];
-    localStorage.setItem('chatList', JSON.stringify(saveChatList));
+  saveChatList(pChat: IChat): boolean {
+    const chatList = [...this.getChatList(), pChat];
+    localStorage.setItem('chatList', JSON.stringify(chatList));
     return true;
   }
 
@@ -32,7 +32,7 @@ export class GptRepository {
       id: id,
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.setChat(newChat);
+    this.saveChatList(newChat);
     return id;
   }
 
