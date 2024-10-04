@@ -9,13 +9,9 @@ import ChatLogContentInput from '@/components/ChatLogContentInput';
 export default function ChatPage() {
   const router = useRouter();
 
-  const createChat = (pChatLogContent: IChatLog['content']) => {
-    const chatService = new ChatService();
-    return chatService.createChat(pChatLogContent);
-  };
-
   const onSubmit = (pChatLogContent: IChatLog['content']) => {
-    const id = createChat(pChatLogContent);
+    const chatService = new ChatService();
+    const id = chatService.createChat(pChatLogContent);
     router.push('/chat/' + id);
   };
 
