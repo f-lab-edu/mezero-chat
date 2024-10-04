@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { ChatService } from '@/business/ChatService';
-import { ChatLogRole, IChatLog } from '@/types/Chat';
+import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
@@ -16,8 +16,9 @@ export default function ChatDetailPage() {
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
   const chatService = new ChatService();
+
   const chatList = chatService.getChatList();
-  const currentChat = chatList.filter((chat) => chat.id === id);
+  const currentChat: IChat[] = chatList.filter((chat) => chat.id === id);
 
   const initChat = () => {
     if (currentChat.length > 0) {
@@ -26,7 +27,7 @@ export default function ChatDetailPage() {
   };
 
   //- todo: move to logic service
-  const onSubmit = async (pChatLogContent: IChatLog['content']) => {
+  const onSubmit = async (pChatLogContent: string) => {
     console.log('==========handleSubmit==========');
     const questionChatLogList: IChatLog[] = [...chatLogList, { role: ChatLogRole.user, content: pChatLogContent }];
     setIsTyping(true);

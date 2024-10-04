@@ -26,7 +26,7 @@ export class GptRepository {
     return true;
   }
 
-  createChat(pChatLogContent: IChatLog['content']): IChat['id'] {
+  createChat(pChatLogContent: string): IChat['id'] {
     const id = v4();
     const newChat: IChat = {
       id: id,

@@ -2,14 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { ChatService } from '@/business/ChatService';
-import { IChatLog } from '@/types/Chat';
 import Header from '@/components/Header';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
 
 export default function ChatPage() {
   const router = useRouter();
 
-  const onSubmit = (pChatLogContent: IChatLog['content']) => {
+  const onSubmit = (pChatLogContent: string) => {
     const chatService = new ChatService();
     const id = chatService.createChat(pChatLogContent);
     router.push('/chat/' + id);
