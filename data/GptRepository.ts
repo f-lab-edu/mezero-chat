@@ -26,7 +26,7 @@ export class GptRepository {
     return lastId;
   }
 
-  setChatList(pChat: IChat): boolean {
+  setChat(pChat: IChat): boolean {
     const saveChatList = [...this.getChatList(), pChat];
     localStorage.setItem('chatList', JSON.stringify(saveChatList));
     return true;
@@ -40,7 +40,7 @@ export class GptRepository {
       displayId: displayId,
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.setChatList(newChat);
+    this.setChat(newChat);
     return displayId;
   }
 
