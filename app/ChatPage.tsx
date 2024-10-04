@@ -2,19 +2,20 @@
 
 import { useRouter } from 'next/navigation';
 import { ChatService } from '@/business/ChatService';
+import { IChatLog } from '@/types/Chat';
 import Header from '@/components/Header';
-import ChatLogMessageInput from '@/components/ChatLogMessageInput';
+import ChatLogContentInput from '@/components/ChatLogContentInput';
 
 export default function ChatPage() {
   const router = useRouter();
 
-  const createChat = (pChatLog: string) => {
+  const createChat = (pChatLogContent: IChatLog['content']) => {
     const chatService = new ChatService();
-    return chatService.createChat(pChatLog);
+    return chatService.createChat(pChatLogContent);
   };
 
-  const onSubmit = async (pChatLog: string) => {
-    const displayId = createChat(pChatLog);
+  const onSubmit = async (pChatLogContent: IChatLog['content']) => {
+    const displayId = createChat(pChatLogContent);
     router.push('/chat/' + displayId);
   };
 
@@ -30,7 +31,7 @@ export default function ChatPage() {
               </h2>
               <div className="w-full bg-white border p-5 rounded-2xl">
                 <div className="max-w-2xl m-auto">
-                  <ChatLogMessageInput onSubmit={onSubmit} />
+                  <ChatLogContentInput onSubmit={onSubmit} />
                 </div>
               </div>
             </div>

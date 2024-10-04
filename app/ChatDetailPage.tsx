@@ -6,7 +6,7 @@ import { ChatService } from '@/business/ChatService';
 import { ChatLogRole, IChatLog } from '@/types/Chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
-import ChatLogMessageInput from '@/components/ChatLogMessageInput';
+import ChatLogContentInput from '@/components/ChatLogContentInput';
 
 export default function ChatDetailPage() {
   const pathname = usePathname();
@@ -26,9 +26,9 @@ export default function ChatDetailPage() {
   };
 
   //- todo: move to logic service
-  const onSubmit = async (pChatLog: string) => {
+  const onSubmit = async (pChatLogContent: IChatLog['content']) => {
     console.log('==========handleSubmit==========');
-    const questionChatLogList: IChatLog[] = [...chatLogList, { role: ChatLogRole.user, content: pChatLog }];
+    const questionChatLogList: IChatLog[] = [...chatLogList, { role: ChatLogRole.user, content: pChatLogContent }];
     setIsTyping(true);
     setChatLogList(questionChatLogList);
 
@@ -57,7 +57,7 @@ export default function ChatDetailPage() {
         </main>
         <div className="sticky bottom-0 w-full py-2 border-t bg-white">
           <div className="max-w-2xl m-auto">
-            <ChatLogMessageInput onSubmit={onSubmit} isTyping={isTyping} />
+            <ChatLogContentInput onSubmit={onSubmit} isTyping={isTyping} />
           </div>
         </div>
       </div>

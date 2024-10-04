@@ -16,8 +16,8 @@ export class ChatService {
     return this.openAiRepository.setStoredChatList(pChatLogList);
   }
 
-  createChat(pChatLog: string) {
-    return this.openAiRepository.createChat(pChatLog);
+  createChat(pChatLogContent: IChatLog['content']) {
+    return this.openAiRepository.createChat(pChatLogContent);
   }
 
   async getAnswer(chatLogList: IChatLog[]) {

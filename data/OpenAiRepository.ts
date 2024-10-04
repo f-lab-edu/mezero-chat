@@ -32,13 +32,13 @@ export class OpenAiRepository {
     return true;
   }
 
-  createChat(pChatLog: string) {
+  createChat(pChatLogContent: IChatLog['content']) {
     const id = this.getStoredLastId() + 1;
     const displayId = v4();
     const newChat: IChat = {
       id: id,
       displayId: displayId,
-      chatLogList: [{ role: ChatLogRole.user, content: pChatLog }],
+      chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
     this.setStoredChatList(newChat);
     return displayId;
