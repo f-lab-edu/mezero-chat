@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import { v4 } from 'uuid';
 
-export class OpenAiRepository {
+export class GptRepository {
   static client = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
@@ -47,7 +47,7 @@ export class OpenAiRepository {
   async getAnswer(chatLogList: IChatLog[]): Promise<string | undefined> {
     console.log(chatLogList);
     try {
-      const chatCompletion = await OpenAiRepository.client.chat.completions.create({
+      const chatCompletion = await GptRepository.client.chat.completions.create({
         messages: chatLogList,
         model: 'gpt-3.5-turbo',
         max_tokens: 1024,

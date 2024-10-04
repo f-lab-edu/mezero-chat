@@ -1,27 +1,27 @@
-import { OpenAiRepository } from '@/data/OpenAiRepository';
+import { GptRepository } from '@/data/GptRepository';
 import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 
 export class ChatService {
-  private openAiRepository: OpenAiRepository;
+  private GptRepository: GptRepository;
 
   constructor() {
-    this.openAiRepository = new OpenAiRepository();
+    this.GptRepository = new GptRepository();
   }
 
   getChatList(): IChat[] {
-    return this.openAiRepository.getChatList();
+    return this.GptRepository.getChatList();
   }
 
   setChatList(pChatLogList: IChat): boolean {
-    return this.openAiRepository.setChatList(pChatLogList);
+    return this.GptRepository.setChatList(pChatLogList);
   }
 
   createChat(pChatLogContent: IChatLog['content']): IChat['displayId'] {
-    return this.openAiRepository.createChat(pChatLogContent);
+    return this.GptRepository.createChat(pChatLogContent);
   }
 
   async getAnswer(chatLogList: IChatLog[]): Promise<IChatLog[]> {
-    const response = await this.openAiRepository.getAnswer(chatLogList);
+    const response = await this.GptRepository.getAnswer(chatLogList);
 
     if (typeof response !== 'string') {
       throw new Error('값이 없습니다.');
