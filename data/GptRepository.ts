@@ -9,8 +9,8 @@ export class GptRepository {
   });
 
   getChatList(): IChat[] {
-    const ChatList = localStorage.getItem('chatList');
-    const chatList: IChat[] = ChatList ? JSON.parse(ChatList) : [];
+    const storedChatList = localStorage.getItem('chatList');
+    const chatList: IChat[] = storedChatList ? JSON.parse(storedChatList) : [];
     return chatList;
   }
 
