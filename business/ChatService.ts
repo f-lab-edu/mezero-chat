@@ -27,7 +27,7 @@ export class ChatService {
       throw new Error('값이 없습니다.');
     }
 
-    const answerChat: IChatLog[] = [
+    const answers: IChatLog[] = [
       ...chatLogList,
       {
         role: ChatLogRole.assistant,
@@ -35,6 +35,6 @@ export class ChatService {
       },
     ];
 
-    return answerChat;
+    return answers;
   }
 }
