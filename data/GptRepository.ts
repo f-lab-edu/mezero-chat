@@ -20,28 +20,20 @@ export class GptRepository {
     return lastChat;
   }
 
-  getLastId(): IChat['id'] {
-    const chatList = this.getChatList();
-    const lastId = chatList.map((chat) => chat.id).pop() || 0;
-    return lastId;
-  }
-
   setChat(pChat: IChat): boolean {
     const saveChatList = [...this.getChatList(), pChat];
     localStorage.setItem('chatList', JSON.stringify(saveChatList));
     return true;
   }
 
-  createChat(pChatLogContent: IChatLog['content']): IChat['displayId'] {
-    const id = this.getLastId() + 1;
-    const displayId = v4();
+  createChat(pChatLogContent: IChatLog['content']): IChat['id'] {
+    const id = v4();
     const newChat: IChat = {
       id: id,
-      displayId: displayId,
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
     this.setChat(newChat);
-    return displayId;
+    return id;
   }
 
   async getAnswer(chatLogList: IChatLog[]): Promise<string | undefined> {

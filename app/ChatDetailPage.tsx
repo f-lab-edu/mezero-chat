@@ -10,14 +10,14 @@ import ChatLogContentInput from '@/components/ChatLogContentInput';
 
 export default function ChatDetailPage() {
   const pathname = usePathname();
-  const displayId = pathname.split('/')[2];
+  const id = pathname.split('/')[2];
 
   const [isTyping, setIsTyping] = useState(false);
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
   const chatService = new ChatService();
   const chatList = chatService.getChatList();
-  const currentChat = chatList.filter((chat) => chat.displayId === displayId);
+  const currentChat = chatList.filter((chat) => chat.id === id);
 
   const initChat = () => {
     if (currentChat.length > 0) {

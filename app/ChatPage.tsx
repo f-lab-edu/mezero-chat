@@ -15,8 +15,8 @@ export default function ChatPage() {
   };
 
   const onSubmit = (pChatLogContent: IChatLog['content']) => {
-    const displayId = createChat(pChatLogContent);
-    router.push('/chat/' + displayId);
+    const id = createChat(pChatLogContent);
+    router.push('/chat/' + id);
   };
 
   return (

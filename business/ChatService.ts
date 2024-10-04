@@ -16,7 +16,7 @@ export class ChatService {
     return this.GptRepository.setChat(pChatLogList);
   }
 
-  createChat(pChatLogContent: IChatLog['content']): IChat['displayId'] {
+  createChat(pChatLogContent: IChatLog['content']): IChat['id'] {
     return this.GptRepository.createChat(pChatLogContent);
   }
 

@@ -1,6 +1,5 @@
 export interface IChat {
-  id: number;
-  displayId: string;
+  id: string;
   chatLogList: IChatLog[];
 }
 
