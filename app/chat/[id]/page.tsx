@@ -1,5 +1,18 @@
 import ChatDetailPage from '@/app/ChatDetailPage';
+import { redirect } from 'next/navigation';
 
-export default function ChatDetail() {
-  return <ChatDetailPage />;
+type ChatDetailProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default function ChatDetail({ params }: ChatDetailProps) {
+  const { id } = params;
+
+  if (!id) {
+    redirect('/');
+  }
+
+  return <ChatDetailPage id={id} />;
 }

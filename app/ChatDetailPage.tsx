@@ -1,17 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { ChatService } from '@/business/ChatService';
 import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import Header from '@/components/Header';
 import Chat from '@/components/Chat';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
 
-export default function ChatDetailPage() {
-  const pathname = usePathname();
-  const id = pathname.split('/')[2];
+type ChatDetailProps = {
+  params: {
+    id: string;
+  };
+};
 
+export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
   const [isTyping, setIsTyping] = useState(false);
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
