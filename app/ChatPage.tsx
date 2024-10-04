@@ -14,7 +14,7 @@ export default function ChatPage() {
     return chatService.createChat(pChatLogContent);
   };
 
-  const onSubmit = async (pChatLogContent: IChatLog['content']) => {
+  const onSubmit = (pChatLogContent: IChatLog['content']) => {
     const displayId = createChat(pChatLogContent);
     router.push('/chat/' + displayId);
   };
