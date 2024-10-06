@@ -20,9 +20,18 @@ export class GptRepository {
     return lastChat;
   }
 
+  findChat(pId: IChat['id']): IChat {
+    const chatList = this.getChatList();
+    return chatList.filter((chat) => chat.id === pId)[0];
+  }
+
   saveChatList(pChat: IChat): boolean {
-    const chatList = [...this.getChatList(), pChat];
-    localStorage.setItem('chatList', JSON.stringify(chatList));
+    const chatList = [...this.getChatList()];
+    const updateChatList = chatList.some((chat) => chat.id === pChat.id)
+      ? chatList.map((chat) => (chat.id === pChat.id ? pChat : chat))
+      : [...chatList, pChat];
+
+    localStorage.setItem('chatList', JSON.stringify(updateChatList));
     return true;
   }
 
@@ -36,27 +45,43 @@ export class GptRepository {
     return id;
   }
 
-  async getAnswer(chatLogList: IChatLog[]): Promise<string | undefined> {
-    console.log(chatLogList);
+  updateChat(pChatLogContent: string, pId: IChat['id']): boolean {
+    const chat = this.findChat(pId);
+    const updateChat = {
+      id: pId,
+      chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
+    };
+    this.saveChatList(updateChat);
+    return true;
+  }
+
+  async getAnswer(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChatLog[]> {
+    console.log(pChatLogList);
     try {
       const chatCompletion = await GptRepository.client.chat.completions.create({
-        messages: chatLogList,
+        messages: pChatLogList,
         model: 'gpt-3.5-turbo',
         max_tokens: 1024,
         top_p: 0.5,
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
       });
-
-      console.log(chatCompletion);
       const response = chatCompletion.choices[0].message.content;
+
       if (response === null && typeof response !== 'string') {
         throw new Error();
       }
-      return response;
+
+      const answerChat = {
+        id: pId,
+        chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: response }],
+      };
+      this.saveChatList(answerChat);
+
+      return answerChat['chatLogList'];
     } catch (error) {
       console.error('오류가 발생했습니다');
-      console.log(error);
+      return [];
     }
   }
 }

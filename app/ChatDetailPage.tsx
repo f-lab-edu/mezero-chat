@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { ChatService } from '@/business/ChatService';
-import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
+import { IChatLog, ChatLogRole } from '@/types/Chat';
 import Header from '@/components/Header';
-import Chat from '@/components/Chat';
+import ChatLog from '@/components/ChatLog';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
 
 type ChatDetailProps = {
@@ -19,26 +19,34 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
 
   const chatService = new ChatService();
 
-  const chatList = chatService.getChatList();
-  const currentChat: IChat[] = chatList.filter((chat) => chat.id === id);
+  const initChat = async () => {
+    const chat = chatService.findChat(id);
+    renderChatLogList();
 
-  const initChat = () => {
-    if (currentChat.length > 0) {
-      setChatLogList(currentChat[0].chatLogList);
+    if (isLastChatLogFromUser()) {
+      const response: IChatLog[] = await chatService.getAnswer(chat.chatLogList, id);
+      setChatLogList(response);
+      setIsTyping(false);
     }
   };
 
-  //- todo: move to logic service
-  const onSubmit = async (pChatLogContent: string) => {
-    console.log('==========handleSubmit==========');
-    const questionChatLogList: IChatLog[] = [...chatLogList, { role: ChatLogRole.user, content: pChatLogContent }];
-    setIsTyping(true);
-    setChatLogList(questionChatLogList);
+  const renderChatLogList = () => {
+    const chat = chatService.findChat(id);
+    if (chat.chatLogList.length > 0) {
+      setChatLogList(chat.chatLogList);
+    }
+  };
 
-    const chatService = new ChatService();
-    const response = await chatService.getAnswer(questionChatLogList);
-    setIsTyping(false);
-    setChatLogList(response);
+  const isLastChatLogFromUser = (): boolean => {
+    const chat = chatService.findChat(id);
+    const lastChatLogRole = chat.chatLogList.map((chatLog) => chatLog.role).pop();
+    return lastChatLogRole === ChatLogRole.user ? true : false;
+  };
+
+  const onSubmit = (pChatLogContent: string) => {
+    setIsTyping(true);
+    chatService.updateChat(pChatLogContent, id);
+    initChat();
   };
 
   useEffect(() => {
@@ -53,7 +61,7 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
           <div className="flex-1 w-full max-w-2xl m-auto">
             <div className="space-y-4">
               {chatLogList.map((chat, index) => (
-                <Chat key={chat.content + index} role={chat.role} content={chat.content}></Chat>
+                <ChatLog key={chat.content + index} role={chat.role} content={chat.content}></ChatLog>
               ))}
             </div>
           </div>
