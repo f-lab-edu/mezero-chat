@@ -21,17 +21,15 @@ export class ChatService {
     return this.GptRepository.createChat(pChatLogContent);
   }
 
-  updateChat(pChatLogContent: string, pId: IChat['id']): boolean {
-    return this.GptRepository.updateChat(pChatLogContent, pId);
+  createQuestionChatLog(pChatLogContent: string, pId: IChat['id']): IChat {
+    return this.GptRepository.createQuestionChatLog(pChatLogContent, pId);
   }
 
-  async getAnswer(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChatLog[]> {
-    const response = await this.GptRepository.getAnswer(pChatLogList, pId);
-
-    if (response.length === 0) {
+  async createAnswerChatLog(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChat> {
+    const response = await this.GptRepository.createAnswerChatLog(pChatLogList, pId);
+    if (response === undefined) {
       throw new Error('값이 없습니다.');
     }
-
     return response;
   }
 }

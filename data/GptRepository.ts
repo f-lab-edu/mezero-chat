@@ -20,11 +20,6 @@ export class GptRepository {
     return lastChat;
   }
 
-  findChat(pId: IChat['id']): IChat {
-    const chatList = this.getChatList();
-    return chatList.filter((chat) => chat.id === pId)[0];
-  }
-
   saveChatList(pChat: IChat): boolean {
     const chatList = [...this.getChatList()];
     const updateChatList = chatList.some((chat) => chat.id === pChat.id)
@@ -33,6 +28,11 @@ export class GptRepository {
 
     localStorage.setItem('chatList', JSON.stringify(updateChatList));
     return true;
+  }
+
+  findChat(pId: IChat['id']): IChat {
+    const chatList = this.getChatList();
+    return chatList.filter((chat) => chat.id === pId)[0];
   }
 
   createChat(pChatLogContent: string): IChat['id'] {
@@ -45,18 +45,17 @@ export class GptRepository {
     return id;
   }
 
-  updateChat(pChatLogContent: string, pId: IChat['id']): boolean {
+  createQuestionChatLog(pChatLogContent: string, pId: IChat['id']): IChat {
     const chat = this.findChat(pId);
     const updateChat = {
       id: pId,
       chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
     };
     this.saveChatList(updateChat);
-    return true;
+    return updateChat;
   }
 
-  async getAnswer(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChatLog[]> {
-    console.log(pChatLogList);
+  async createAnswerChatLog(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChat | undefined> {
     try {
       const chatCompletion = await GptRepository.client.chat.completions.create({
         messages: pChatLogList,
@@ -77,11 +76,9 @@ export class GptRepository {
         chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: response }],
       };
       this.saveChatList(answerChat);
-
-      return answerChat['chatLogList'];
+      return answerChat;
     } catch (error) {
       console.error('오류가 발생했습니다');
-      return [];
     }
   }
 }

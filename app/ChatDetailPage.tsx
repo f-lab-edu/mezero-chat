@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ChatService } from '@/business/ChatService';
-import { IChatLog, ChatLogRole } from '@/types/Chat';
+import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import Header from '@/components/Header';
 import ChatLog from '@/components/ChatLog';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
@@ -21,19 +21,12 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
 
   const initChat = async () => {
     const chat = chatService.findChat(id);
-    renderChatLogList();
+    setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser()) {
-      const response: IChatLog[] = await chatService.getAnswer(chat.chatLogList, id);
-      setChatLogList(response);
+      const answerChatLog: IChat = await chatService.createAnswerChatLog(chat.chatLogList, id);
+      setChatLogList(answerChatLog.chatLogList);
       setIsTyping(false);
-    }
-  };
-
-  const renderChatLogList = () => {
-    const chat = chatService.findChat(id);
-    if (chat.chatLogList.length > 0) {
-      setChatLogList(chat.chatLogList);
     }
   };
 
@@ -43,10 +36,13 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
     return lastChatLogRole === ChatLogRole.user ? true : false;
   };
 
-  const onSubmit = (pChatLogContent: string) => {
+  const onSubmit = async (pChatLogContent: string) => {
     setIsTyping(true);
-    chatService.updateChat(pChatLogContent, id);
-    initChat();
+    const questionChatLog: IChat = chatService.createQuestionChatLog(pChatLogContent, id);
+    setChatLogList(questionChatLog.chatLogList);
+    const answerChatLog: IChat = await chatService.createAnswerChatLog(questionChatLog.chatLogList, id);
+    setChatLogList(answerChatLog.chatLogList);
+    setIsTyping(false);
   };
 
   useEffect(() => {
