@@ -12,21 +12,20 @@ export class ChatService {
     return this.GptRepository.getChatList();
   }
 
-  findChat(pId: IChat['id']): IChat {
-    const chatList = this.getChatList();
-    return chatList.filter((chat) => chat.id === pId)[0];
+  findChat(pId: string): IChat {
+    return this.GptRepository.findChat(pId);
   }
 
-  createChat(pChatLogContent: string): IChat['id'] {
+  createChat(pChatLogContent: string): string {
     return this.GptRepository.createChat(pChatLogContent);
   }
 
-  createQuestionChatLog(pChatLogContent: string, pId: IChat['id']): IChat {
-    return this.GptRepository.createQuestionChatLog(pChatLogContent, pId);
+  createQuestionChatLog(pId: string, pChatLogContent: string): IChat {
+    return this.GptRepository.createQuestionChatLog(pId, pChatLogContent);
   }
 
-  async createAnswerChatLog(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChat> {
-    const response = await this.GptRepository.createAnswerChatLog(pChatLogList, pId);
+  async createAnswerChatLog(pId: string, pChatLogList: IChatLog[]): Promise<IChat> {
+    const response = await this.GptRepository.createAnswerChatLog(pId, pChatLogList);
     if (response === undefined) {
       throw new Error('값이 없습니다.');
     }

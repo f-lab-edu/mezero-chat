@@ -30,12 +30,12 @@ export class GptRepository {
     return true;
   }
 
-  findChat(pId: IChat['id']): IChat {
+  findChat(pId: string): IChat {
     const chatList = this.getChatList();
     return chatList.filter((chat) => chat.id === pId)[0];
   }
 
-  createChat(pChatLogContent: string): IChat['id'] {
+  createChat(pChatLogContent: string): string {
     const id = v4();
     const newChat: IChat = {
       id: id,
@@ -45,7 +45,7 @@ export class GptRepository {
     return id;
   }
 
-  createQuestionChatLog(pChatLogContent: string, pId: IChat['id']): IChat {
+  createQuestionChatLog(pId: string, pChatLogContent: string): IChat {
     const chat = this.findChat(pId);
     const updateChat = {
       id: pId,
@@ -55,7 +55,7 @@ export class GptRepository {
     return updateChat;
   }
 
-  async createAnswerChatLog(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChat | undefined> {
+  async createAnswerChatLog(pId: string, pChatLogList: IChatLog[]): Promise<IChat | undefined> {
     try {
       const chatCompletion = await GptRepository.client.chat.completions.create({
         messages: pChatLogList,

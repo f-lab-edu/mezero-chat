@@ -24,7 +24,7 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
     setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser()) {
-      const answerChatLog: IChat = await chatService.createAnswerChatLog(chat.chatLogList, id);
+      const answerChatLog: IChat = await chatService.createAnswerChatLog(id, chat.chatLogList);
       setChatLogList(answerChatLog.chatLogList);
       setIsTyping(false);
     }
@@ -38,9 +38,9 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
 
   const onSubmit = async (pChatLogContent: string) => {
     setIsTyping(true);
-    const questionChatLog: IChat = chatService.createQuestionChatLog(pChatLogContent, id);
+    const questionChatLog: IChat = chatService.createQuestionChatLog(id, pChatLogContent);
     setChatLogList(questionChatLog.chatLogList);
-    const answerChatLog: IChat = await chatService.createAnswerChatLog(questionChatLog.chatLogList, id);
+    const answerChatLog: IChat = await chatService.createAnswerChatLog(id, questionChatLog.chatLogList);
     setChatLogList(answerChatLog.chatLogList);
     setIsTyping(false);
   };
