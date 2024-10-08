@@ -20,7 +20,7 @@ export class GptRepository {
     return lastChat;
   }
 
-  saveChatList(pChat: IChat): boolean {
+  addToChat(pChat: IChat): boolean {
     const chatList = [...this.getChatList()];
     const updateChatList = chatList.some((chat) => chat.id === pChat.id)
       ? chatList.map((chat) => (chat.id === pChat.id ? pChat : chat))
@@ -30,7 +30,7 @@ export class GptRepository {
     return true;
   }
 
-  findChat(pId: string): IChat {
+  getChat(pId: string): IChat {
     const chatList = this.getChatList();
     return chatList.filter((chat) => chat.id === pId)[0];
   }
@@ -41,17 +41,17 @@ export class GptRepository {
       id: id,
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.saveChatList(newChat);
+    this.addToChat(newChat);
     return id;
   }
 
   createQuestionChatLog(pId: string, pChatLogContent: string): IChat {
-    const chat = this.findChat(pId);
+    const chat = this.getChat(pId);
     const updateChat = {
       id: pId,
       chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.saveChatList(updateChat);
+    this.addToChat(updateChat);
     return updateChat;
   }
 
@@ -75,7 +75,7 @@ export class GptRepository {
         id: pId,
         chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: response }],
       };
-      this.saveChatList(answerChat);
+      this.addToChat(answerChat);
       return answerChat;
     } catch (error) {
       console.error('오류가 발생했습니다');

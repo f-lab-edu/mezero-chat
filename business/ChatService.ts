@@ -12,8 +12,8 @@ export class ChatService {
     return this.GptRepository.getChatList();
   }
 
-  findChat(pId: string): IChat {
-    return this.GptRepository.findChat(pId);
+  getChat(pId: string): IChat {
+    return this.GptRepository.getChat(pId);
   }
 
   createChat(pChatLogContent: string): string {

@@ -8,20 +8,14 @@ import ChatLayout from '@/app/chat/ChatLayout';
 import ChatLog from '@/components/ChatLog';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
 
-type ChatDetailProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
+export default function ChatDetailPage({ id }: { id: string }) {
   const [isTyping, setIsTyping] = useState(false);
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
   const chatService = new ChatService();
 
   const initChat = async () => {
-    const chat = chatService.findChat(id);
+    const chat = chatService.getChat(id);
     setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser()) {
@@ -32,7 +26,7 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
   };
 
   const isLastChatLogFromUser = (): boolean => {
-    const chat = chatService.findChat(id);
+    const chat = chatService.getChat(id);
     const lastChatLogRole = chat.chatLogList.map((chatLog) => chatLog.role).pop();
     return lastChatLogRole === ChatLogRole.user ? true : false;
   };
