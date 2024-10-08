@@ -1,4 +1,4 @@
-import ChatDetailPage from '@/app/ChatDetailPage';
+import ChatDetailPage from '@/app/chat/ChatDetailPage';
 import { redirect } from 'next/navigation';
 
 type ChatDetailProps = {

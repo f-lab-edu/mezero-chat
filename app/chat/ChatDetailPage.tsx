@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { ChatService } from '@/business/ChatService';
 import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
-import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
+import ChatLayout from '@/app/chat/ChatLayout';
 import ChatLog from '@/components/ChatLog';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
 
@@ -50,24 +51,26 @@ export default function ChatDetailPage({ id }: ChatDetailProps['params']) {
   }, []);
 
   return (
-    <div className="grid h-screen w-full">
-      <div className="flex flex-col">
-        <Header />
-        <main className="relative flex h-full min-h-[50vh] flex-col bg-white p-4 lg:col-span-2">
-          <div className="flex-1 w-full max-w-2xl m-auto">
-            <div className="space-y-4">
-              {chatLogList.map((chat, index) => (
-                <ChatLog key={chat.content + index} role={chat.role} content={chat.content}></ChatLog>
-              ))}
+    <>
+      <Sidebar />
+      <main className="min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300 lg:ml-72">
+        <ChatLayout>
+          {chatLogList.map((chat, index) => (
+            <ChatLog key={chat.content + index} role={chat.role} content={chat.content}></ChatLog>
+          ))}
+        </ChatLayout>
+      </main>
+      <div className="transition-[margin-left] ease-in-out duration-300 lg:ml-72">
+        <div className="z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="mx-4 md:mx-8 flex h-14 items-center">
+            <div className="flex-1 w-full max-w-2xl m-auto">
+              <div className="space-y-4">
+                <ChatLogContentInput onSubmit={onSubmit} isTyping={false} />
+              </div>
             </div>
-          </div>
-        </main>
-        <div className="sticky bottom-0 w-full py-2 border-t bg-white">
-          <div className="max-w-2xl m-auto">
-            <ChatLogContentInput onSubmit={onSubmit} isTyping={isTyping} />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
