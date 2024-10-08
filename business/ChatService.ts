@@ -1,5 +1,7 @@
+import { v4 } from 'uuid';
 import { GptRepository } from '@/data/GptRepository';
 import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
+import { GptModel, IGptParam } from '@/types/GptModel';
 
 export class ChatService {
   private GptRepository: GptRepository;
@@ -17,18 +19,46 @@ export class ChatService {
   }
 
   createChat(pChatLogContent: string): string {
-    return this.GptRepository.createChat(pChatLogContent);
+    const id = v4();
+    const newChat: IChat = {
+      id: id,
+      chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
+    };
+    this.GptRepository.addToChat(newChat);
+    return id;
   }
 
-  createQuestionChatLog(pId: string, pChatLogContent: string): IChat {
-    return this.GptRepository.createQuestionChatLog(pId, pChatLogContent);
+  createQuestionChatLog(pId: string, pChatLogContent: string): IChatLog[] {
+    const chat = this.getChat(pId);
+    const updateChat = {
+      id: pId,
+      chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
+    };
+    this.GptRepository.addToChat(updateChat);
+    return updateChat.chatLogList;
   }
 
-  async createAnswerChatLog(pId: string, pChatLogList: IChatLog[]): Promise<IChat> {
-    const response = await this.GptRepository.createAnswerChatLog(pId, pChatLogList);
-    if (response === undefined) {
-      throw new Error('값이 없습니다.');
+  async createAnswerChatLog(pId: string, pChatLogList: IChatLog[]): Promise<IChatLog[]> {
+    const chatCompletion: IGptParam = {
+      messages: pChatLogList,
+      model: GptModel.gpt3_5_Turbo,
+      max_tokens: 1024,
+      top_p: 0.5,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.5,
+    };
+    const answerChatLogContent = await this.GptRepository.createAnswerChatLog(chatCompletion);
+
+    if (answerChatLogContent === null || typeof answerChatLogContent !== 'string') {
+      throw new Error();
     }
-    return response;
+
+    const answerChat = {
+      id: pId,
+      chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: answerChatLogContent }],
+    };
+    this.GptRepository.addToChat(answerChat);
+
+    return answerChat.chatLogList;
   }
 }

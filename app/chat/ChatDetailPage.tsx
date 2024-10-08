@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ChatService } from '@/business/ChatService';
-import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
+import { IChatLog, ChatLogRole } from '@/types/Chat';
 import Sidebar from '@/components/Sidebar';
 import ChatLayout from '@/app/chat/ChatLayout';
 import ChatLog from '@/components/ChatLog';
@@ -19,8 +19,8 @@ export default function ChatDetailPage({ id }: { id: string }) {
     setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser()) {
-      const answerChatLog: IChat = await chatService.createAnswerChatLog(id, chat.chatLogList);
-      setChatLogList(answerChatLog.chatLogList);
+      const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, chat.chatLogList);
+      setChatLogList(answerChatLogList);
       setIsTyping(false);
     }
   };
@@ -33,10 +33,10 @@ export default function ChatDetailPage({ id }: { id: string }) {
 
   const onSubmit = async (pChatLogContent: string) => {
     setIsTyping(true);
-    const questionChatLog: IChat = chatService.createQuestionChatLog(id, pChatLogContent);
-    setChatLogList(questionChatLog.chatLogList);
-    const answerChatLog: IChat = await chatService.createAnswerChatLog(id, questionChatLog.chatLogList);
-    setChatLogList(answerChatLog.chatLogList);
+    const questionChatLogList: IChatLog[] = chatService.createQuestionChatLog(id, pChatLogContent);
+    setChatLogList(questionChatLogList);
+    const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, questionChatLogList);
+    setChatLogList(answerChatLogList);
     setIsTyping(false);
   };
 
@@ -59,7 +59,7 @@ export default function ChatDetailPage({ id }: { id: string }) {
           <div className="mx-4 md:mx-8 flex h-14 items-center">
             <div className="flex-1 w-full max-w-2xl m-auto">
               <div className="space-y-4">
-                <ChatLogContentInput onSubmit={onSubmit} isTyping={false} />
+                <ChatLogContentInput onSubmit={onSubmit} isTyping={isTyping} />
               </div>
             </div>
           </div>
