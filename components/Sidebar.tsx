@@ -18,7 +18,7 @@ export default function Sidebar({ chatId }: { chatId: string }) {
                 asChild
               >
                 <Link href={'/chat/' + chat.id} scroll={false}>
-                  <p className="max-w-[200px] truncate translate-x-0 opacity-100">{chat.title + chat.id}</p>
+                  <p className="max-w-[200px] truncate translate-x-0 opacity-100">{chat.title}</p>
                 </Link>
               </Button>
             </li>

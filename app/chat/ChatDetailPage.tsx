@@ -9,11 +9,11 @@ import ChatLog from '@/components/ChatLog';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
 
 export default function ChatDetailPage({ id }: { id: string }) {
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [chatTitle, setChatTitle] = useState<string>('');
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
   const chatService = new ChatService();
-
   const initChat = async () => {
     const chat = chatService.getChat(id);
     setChatLogList(chat.chatLogList);
@@ -22,6 +22,11 @@ export default function ChatDetailPage({ id }: { id: string }) {
       const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, chat.chatLogList);
       setChatLogList(answerChatLogList);
       setIsTyping(false);
+
+      if (createTitleFlag()) {
+        const chatTitle = await chatService.createChatTitle(id, answerChatLogList);
+        setChatTitle(chatTitle);
+      }
     }
   };
 
@@ -31,6 +36,10 @@ export default function ChatDetailPage({ id }: { id: string }) {
     return lastChatLogRole === ChatLogRole.user ? true : false;
   };
 
+  const createTitleFlag = () => {
+    return chatTitle.length === 0 || chatLogList.length % 10 === 2 ? true : false;
+  };
+
   const onSubmit = async (pChatLogContent: string) => {
     setIsTyping(true);
     const questionChatLogList: IChatLog[] = chatService.createQuestionChatLog(id, pChatLogContent);
@@ -38,6 +47,11 @@ export default function ChatDetailPage({ id }: { id: string }) {
     const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, questionChatLogList);
     setChatLogList(answerChatLogList);
     setIsTyping(false);
+
+    if (createTitleFlag()) {
+      const chatTitle = await chatService.createChatTitle(id, answerChatLogList);
+      setChatTitle(chatTitle);
+    }
   };
 
   useEffect(() => {
