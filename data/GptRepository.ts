@@ -14,12 +14,6 @@ export class GptRepository {
     return chatList;
   }
 
-  getLastChat(): IChat | null {
-    const chatList = this.getChatList();
-    const lastChat = chatList.pop() || null;
-    return lastChat;
-  }
-
   getChat(pId: string): IChat {
     const chatList = this.getChatList();
     return chatList.filter((chat) => chat.id === pId)[0];
@@ -35,7 +29,7 @@ export class GptRepository {
     return true;
   }
 
-  async createAnswerChatLog(pChatCompletion: IGptParam): Promise<string | null> {
+  async getAnswer(pChatCompletion: IGptParam): Promise<string | null> {
     try {
       const chatCompletion = await GptRepository.client.chat.completions.create(pChatCompletion);
       return chatCompletion.choices[0].message.content;
