@@ -29,7 +29,7 @@ export class ChatService {
     return id;
   }
 
-  async createChatTitle(pId: string, pChatLogList: IChatLog[]): Promise<string> {
+  async updateChatTitle(pId: string, pChatLogList: IChatLog[]): Promise<string> {
     const chatLogList = [
       ...pChatLogList,
       {

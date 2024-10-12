@@ -19,15 +19,17 @@ export default function ChatDetailPage({ id }: { id: string }) {
     setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser(chat)) {
+      setIsTyping(true);
       const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(pId, chat.chatLogList);
       setChatLogList(answerChatLogList);
-      setIsTyping(false);
 
       if (createTitleFlag()) {
-        const chatTitle = await chatService.createChatTitle(pId, answerChatLogList);
+        const chatTitle = await chatService.updateChatTitle(pId, answerChatLogList);
         setChatTitle(chatTitle);
       }
     }
+
+    setIsTyping(false);
   };
 
   const isLastChatLogFromUser = (pChat: IChat): boolean => {
@@ -36,7 +38,7 @@ export default function ChatDetailPage({ id }: { id: string }) {
   };
 
   const createTitleFlag = () => {
-    return chatTitle.length === 0 || chatLogList.length % 10 === 2 ? true : false;
+    return chatTitle.length === 0 || (chatLogList.length > 2 && chatLogList.length % 10 === 2) ? true : false;
   };
 
   const onSubmit = async (pChatLogContent: string) => {
@@ -45,12 +47,12 @@ export default function ChatDetailPage({ id }: { id: string }) {
     setChatLogList(questionChatLogList);
     const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, questionChatLogList);
     setChatLogList(answerChatLogList);
-    setIsTyping(false);
 
     if (createTitleFlag()) {
-      const chatTitle = await chatService.createChatTitle(id, answerChatLogList);
+      const chatTitle = await chatService.updateChatTitle(id, answerChatLogList);
       setChatTitle(chatTitle);
     }
+    setIsTyping(false);
   };
 
   useEffect(() => {
