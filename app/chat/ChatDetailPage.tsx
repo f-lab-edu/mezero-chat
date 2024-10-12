@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ChatService } from '@/business/ChatService';
-import { IChatLog, ChatLogRole } from '@/types/Chat';
+import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import Sidebar from '@/components/Sidebar';
 import ChatLayout from '@/app/chat/ChatLayout';
 import ChatLog from '@/components/ChatLog';
@@ -14,25 +14,24 @@ export default function ChatDetailPage({ id }: { id: string }) {
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
   const chatService = new ChatService();
-  const initChat = async () => {
-    const chat = chatService.getChat(id);
+  const initChat = async (pId: string) => {
+    const chat = chatService.getChat(pId);
     setChatLogList(chat.chatLogList);
 
-    if (isLastChatLogFromUser()) {
-      const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, chat.chatLogList);
+    if (isLastChatLogFromUser(chat)) {
+      const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(pId, chat.chatLogList);
       setChatLogList(answerChatLogList);
       setIsTyping(false);
 
       if (createTitleFlag()) {
-        const chatTitle = await chatService.createChatTitle(id, answerChatLogList);
+        const chatTitle = await chatService.createChatTitle(pId, answerChatLogList);
         setChatTitle(chatTitle);
       }
     }
   };
 
-  const isLastChatLogFromUser = (): boolean => {
-    const chat = chatService.getChat(id);
-    const lastChatLogRole = chat.chatLogList.map((chatLog) => chatLog.role).pop();
+  const isLastChatLogFromUser = (pChat: IChat): boolean => {
+    const lastChatLogRole = pChat.chatLogList.map((chatLog) => chatLog.role).pop();
     return lastChatLogRole === ChatLogRole.user ? true : false;
   };
 
@@ -55,8 +54,8 @@ export default function ChatDetailPage({ id }: { id: string }) {
   };
 
   useEffect(() => {
-    initChat();
-  }, []);
+    initChat(id);
+  }, [id]);
 
   return (
     <>
