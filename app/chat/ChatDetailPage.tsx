@@ -24,8 +24,8 @@ export default function ChatDetailPage({ id }: { id: string }) {
       setChatLogList(answerChatLogList);
 
       if (createTitleFlag()) {
-        const chatTitle = await chatService.updateChatTitle(pId, answerChatLogList);
-        setChatTitle(chatTitle);
+        const newChatTitle = await chatService.updateChatTitle(pId, answerChatLogList);
+        setChatTitle(newChatTitle);
       }
     }
 
@@ -49,8 +49,8 @@ export default function ChatDetailPage({ id }: { id: string }) {
     setChatLogList(answerChatLogList);
 
     if (createTitleFlag()) {
-      const chatTitle = await chatService.updateChatTitle(id, answerChatLogList);
-      setChatTitle(chatTitle);
+      const newChatTitle = await chatService.updateChatTitle(id, answerChatLogList);
+      setChatTitle(newChatTitle);
     }
     setIsTyping(false);
   };
