@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
-import { v4 } from 'uuid';
+import { IChat } from '@/types/Chat';
+import { IGptParam } from '@/types/GptModel';
 
 export class GptRepository {
   static client = new OpenAI({
@@ -14,13 +14,12 @@ export class GptRepository {
     return chatList;
   }
 
-  getLastChat(): IChat | null {
+  getChat(pId: string): IChat {
     const chatList = this.getChatList();
-    const lastChat = chatList.pop() || null;
-    return lastChat;
+    return chatList.filter((chat) => chat.id === pId)[0];
   }
 
-  saveChatList(pChat: IChat): boolean {
+  addToChat(pChat: IChat): boolean {
     const chatList = [...this.getChatList()];
     const updateChatList = chatList.some((chat) => chat.id === pChat.id)
       ? chatList.map((chat) => (chat.id === pChat.id ? pChat : chat))
@@ -30,55 +29,13 @@ export class GptRepository {
     return true;
   }
 
-  findChat(pId: IChat['id']): IChat {
-    const chatList = this.getChatList();
-    return chatList.filter((chat) => chat.id === pId)[0];
-  }
-
-  createChat(pChatLogContent: string): IChat['id'] {
-    const id = v4();
-    const newChat: IChat = {
-      id: id,
-      chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
-    };
-    this.saveChatList(newChat);
-    return id;
-  }
-
-  createQuestionChatLog(pChatLogContent: string, pId: IChat['id']): IChat {
-    const chat = this.findChat(pId);
-    const updateChat = {
-      id: pId,
-      chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
-    };
-    this.saveChatList(updateChat);
-    return updateChat;
-  }
-
-  async createAnswerChatLog(pChatLogList: IChatLog[], pId: IChat['id']): Promise<IChat | undefined> {
+  async getAnswer(pChatCompletion: IGptParam): Promise<string | null> {
     try {
-      const chatCompletion = await GptRepository.client.chat.completions.create({
-        messages: pChatLogList,
-        model: 'gpt-3.5-turbo',
-        max_tokens: 1024,
-        top_p: 0.5,
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-      });
-      const response = chatCompletion.choices[0].message.content;
-
-      if (response === null && typeof response !== 'string') {
-        throw new Error();
-      }
-
-      const answerChat = {
-        id: pId,
-        chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: response }],
-      };
-      this.saveChatList(answerChat);
-      return answerChat;
+      const chatCompletion = await GptRepository.client.chat.completions.create(pChatCompletion);
+      return chatCompletion.choices[0].message.content;
     } catch (error) {
       console.error('오류가 발생했습니다');
+      return null;
     }
   }
 }
