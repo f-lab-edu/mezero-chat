@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '메인 페이지',
-  description: '메인 페이지 설명입니다.',
+  title: 'mezero-chat',
+  description: 'mezero-chat에서 무엇이든지 물어보세요.',
 };
 
 export default function RootLayout({
