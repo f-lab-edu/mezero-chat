@@ -27,3 +27,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 ## Openai API Reference 를 참고한다.
 
 - [Openai API Reference](https://platform.openai.com/docs/api-reference/introduction)
+
+## 배포 페이지
+
+- [Mezero Chat](https://mezero-chat-git-master-nayoungs-projects-3ac07cc2.vercel.app/)
