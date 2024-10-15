@@ -7,6 +7,7 @@ import Sidebar from '@/components/Sidebar';
 import ChatLayout from '@/app/chat/ChatLayout';
 import ChatLog from '@/components/ChatLog';
 import ChatLogContentInput from '@/components/ChatLogContentInput';
+import GoChatPageButton from '@/components/GoChatPageButton';
 
 export default function ChatDetailPage({ id }: { id: string }) {
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -80,6 +81,7 @@ export default function ChatDetailPage({ id }: { id: string }) {
           </div>
         </div>
       </div>
+      <GoChatPageButton />
     </>
   );
 }
