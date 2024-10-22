@@ -63,14 +63,14 @@ export default function ChatDetailPage({ id }: { id: string }) {
   return (
     <>
       <Sidebar chatId={id} />
-      <main className="min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300 lg:ml-72">
+      <main className="min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300 sm:ml-72">
         <ChatLayout>
           {chatLogList.map((chat, index) => (
             <ChatLog key={chat.content + index} role={chat.role} content={chat.content}></ChatLog>
           ))}
         </ChatLayout>
       </main>
-      <div className="transition-[margin-left] ease-in-out duration-300 lg:ml-72">
+      <div className="transition-[margin-left] ease-in-out duration-300 sm:ml-72">
         <div className="z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="mx-4 md:mx-8 flex h-14 items-center">
             <div className="flex-1 w-full max-w-2xl m-auto">
