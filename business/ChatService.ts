@@ -4,32 +4,26 @@ import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import { GptModel, IGptParam } from '@/types/GptModel';
 
 export class ChatService {
-  private gptRepository: GptRepository;
-
-  constructor() {
-    this.gptRepository = new GptRepository();
+  public static getChatList(): IChat[] {
+    return GptRepository.getChatList();
   }
 
-  getChatList(): IChat[] {
-    return this.gptRepository.getChatList();
+  public static getChat(pId: string): IChat {
+    return GptRepository.getChat(pId);
   }
 
-  getChat(pId: string): IChat {
-    return this.gptRepository.getChat(pId);
-  }
-
-  createChat(pChatLogContent: string): string {
+  public static createChat(pChatLogContent: string): string {
     const id = v4();
     const newChat: IChat = {
       id: id,
       title: '',
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.gptRepository.addToChat(newChat);
+    GptRepository.addToChat(newChat);
     return id;
   }
 
-  async updateChatTitle(pId: string, pChatLogList: IChatLog[]): Promise<string> {
+  public static async updateChatTitle(pId: string, pChatLogList: IChatLog[]): Promise<string> {
     const chatLogList = [
       ...pChatLogList,
       {
@@ -45,22 +39,22 @@ export class ChatService {
     };
     console.log(answerChat);
     console.log(answerChat.title);
-    this.gptRepository.addToChat(answerChat);
+    GptRepository.addToChat(answerChat);
     return answerChat.title;
   }
 
-  createQuestionChatLog(pId: string, pChatLogContent: string): IChatLog[] {
+  public static createQuestionChatLog(pId: string, pChatLogContent: string): IChatLog[] {
     const chat = this.getChat(pId);
     const updateChat = {
       id: pId,
       title: chat.title,
       chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.gptRepository.addToChat(updateChat);
+    GptRepository.addToChat(updateChat);
     return updateChat.chatLogList;
   }
 
-  async createAnswerChatLog(pId: string, pChatLogList: IChatLog[]): Promise<IChatLog[]> {
+  public static async createAnswerChatLog(pId: string, pChatLogList: IChatLog[]): Promise<IChatLog[]> {
     const chat = this.getChat(pId);
     const answerChatLogContent = await this.getAnswer(pChatLogList);
 
@@ -70,11 +64,11 @@ export class ChatService {
       chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: answerChatLogContent }],
     };
 
-    this.gptRepository.addToChat(answerChat);
+    GptRepository.addToChat(answerChat);
     return answerChat.chatLogList;
   }
 
-  async getAnswer(pChatLogList: IChatLog[]): Promise<string> {
+  public static async getAnswer(pChatLogList: IChatLog[]): Promise<string> {
     const chatCompletion: IGptParam = {
       messages: pChatLogList,
       model: GptModel.gpt3_5_Turbo,
@@ -83,7 +77,7 @@ export class ChatService {
       frequency_penalty: 0.5,
       presence_penalty: 0.5,
     };
-    const answerChatLogContent = await this.gptRepository.getAnswer(chatCompletion);
+    const answerChatLogContent = await GptRepository.getAnswer(chatCompletion);
     if (answerChatLogContent === null || typeof answerChatLogContent !== 'string') {
       throw new Error();
     }

@@ -14,18 +14,17 @@ export default function ChatDetailPage({ id }: { id: string }) {
   const [chatTitle, setChatTitle] = useState<string>('');
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
-  const chatService = new ChatService();
   const initChat = async (pId: string) => {
-    const chat = chatService.getChat(pId);
+    const chat = ChatService.getChat(pId);
     setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser(chat)) {
       setIsTyping(true);
-      const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(pId, chat.chatLogList);
+      const answerChatLogList: IChatLog[] = await ChatService.createAnswerChatLog(pId, chat.chatLogList);
       setChatLogList(answerChatLogList);
 
       if (createTitleFlag()) {
-        const newChatTitle = await chatService.updateChatTitle(pId, answerChatLogList);
+        const newChatTitle = await ChatService.updateChatTitle(pId, answerChatLogList);
         setChatTitle(newChatTitle);
       }
     }
@@ -44,13 +43,13 @@ export default function ChatDetailPage({ id }: { id: string }) {
 
   const onSubmit = async (pChatLogContent: string) => {
     setIsTyping(true);
-    const questionChatLogList: IChatLog[] = chatService.createQuestionChatLog(id, pChatLogContent);
+    const questionChatLogList: IChatLog[] = ChatService.createQuestionChatLog(id, pChatLogContent);
     setChatLogList(questionChatLogList);
-    const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, questionChatLogList);
+    const answerChatLogList: IChatLog[] = await ChatService.createAnswerChatLog(id, questionChatLogList);
     setChatLogList(answerChatLogList);
 
     if (createTitleFlag()) {
-      const newChatTitle = await chatService.updateChatTitle(id, answerChatLogList);
+      const newChatTitle = await ChatService.updateChatTitle(id, answerChatLogList);
       setChatTitle(newChatTitle);
     }
     setIsTyping(false);
