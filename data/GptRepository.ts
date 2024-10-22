@@ -3,7 +3,7 @@ import { IChat } from '@/types/Chat';
 import { IGptParam } from '@/types/GptModel';
 
 export class GptRepository {
-  public static client = new OpenAI({
+  private static client = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
@@ -19,13 +19,24 @@ export class GptRepository {
     return chatList.filter((chat) => chat.id === pId)[0];
   }
 
-  public static addToChat(pChat: IChat): boolean {
-    const chatList = [...this.getChatList()];
-    const updateChatList = chatList.some((chat) => chat.id === pChat.id)
-      ? chatList.map((chat) => (chat.id === pChat.id ? pChat : chat))
-      : [...chatList, pChat];
+  public static exist(pId: string): boolean {
+    const chatList = this.getChatList();
+    return chatList.some((chat) => chat.id === pId);
+  }
 
-    localStorage.setItem('chatList', JSON.stringify(updateChatList));
+  public static add(pChat: IChat): IChat[] {
+    const chatList = this.getChatList();
+    return [...chatList, pChat];
+  }
+
+  public static update(pChat: IChat): IChat[] {
+    const chatList = this.getChatList();
+    return chatList.map((chat) => (chat.id === pChat.id ? pChat : chat));
+  }
+
+  public static save(pChat: IChat): boolean {
+    const saveList = this.exist(pChat.id) ? this.update(pChat) : this.add(pChat);
+    localStorage.setItem('chatList', JSON.stringify(saveList));
     return true;
   }
 

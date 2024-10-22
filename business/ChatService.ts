@@ -19,7 +19,7 @@ export class ChatService {
       title: '',
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    GptRepository.addToChat(newChat);
+    GptRepository.save(newChat);
     return id;
   }
 
@@ -39,7 +39,7 @@ export class ChatService {
     };
     console.log(answerChat);
     console.log(answerChat.title);
-    GptRepository.addToChat(answerChat);
+    GptRepository.save(answerChat);
     return answerChat.title;
   }
 
@@ -50,7 +50,7 @@ export class ChatService {
       title: chat.title,
       chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
     };
-    GptRepository.addToChat(updateChat);
+    GptRepository.save(updateChat);
     return updateChat.chatLogList;
   }
 
@@ -64,7 +64,7 @@ export class ChatService {
       chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: answerChatLogContent }],
     };
 
-    GptRepository.addToChat(answerChat);
+    GptRepository.save(answerChat);
     return answerChat.chatLogList;
   }
 
