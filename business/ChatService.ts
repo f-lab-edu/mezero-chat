@@ -4,18 +4,18 @@ import { IChat, IChatLog, ChatLogRole } from '@/types/Chat';
 import { GptModel, IGptParam } from '@/types/GptModel';
 
 export class ChatService {
-  private GptRepository: GptRepository;
+  private gptRepository: GptRepository;
 
   constructor() {
-    this.GptRepository = new GptRepository();
+    this.gptRepository = new GptRepository();
   }
 
   getChatList(): IChat[] {
-    return this.GptRepository.getChatList();
+    return this.gptRepository.getChatList();
   }
 
   getChat(pId: string): IChat {
-    return this.GptRepository.getChat(pId);
+    return this.gptRepository.getChat(pId);
   }
 
   createChat(pChatLogContent: string): string {
@@ -25,7 +25,7 @@ export class ChatService {
       title: '',
       chatLogList: [{ role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.GptRepository.addToChat(newChat);
+    this.gptRepository.addToChat(newChat);
     return id;
   }
 
@@ -45,7 +45,7 @@ export class ChatService {
     };
     console.log(answerChat);
     console.log(answerChat.title);
-    this.GptRepository.addToChat(answerChat);
+    this.gptRepository.addToChat(answerChat);
     return answerChat.title;
   }
 
@@ -56,7 +56,7 @@ export class ChatService {
       title: chat.title,
       chatLogList: [...chat.chatLogList, { role: ChatLogRole.user, content: pChatLogContent }],
     };
-    this.GptRepository.addToChat(updateChat);
+    this.gptRepository.addToChat(updateChat);
     return updateChat.chatLogList;
   }
 
@@ -70,7 +70,7 @@ export class ChatService {
       chatLogList: [...pChatLogList, { role: ChatLogRole.assistant, content: answerChatLogContent }],
     };
 
-    this.GptRepository.addToChat(answerChat);
+    this.gptRepository.addToChat(answerChat);
     return answerChat.chatLogList;
   }
 
@@ -83,7 +83,7 @@ export class ChatService {
       frequency_penalty: 0.5,
       presence_penalty: 0.5,
     };
-    const answerChatLogContent = await this.GptRepository.getAnswer(chatCompletion);
+    const answerChatLogContent = await this.gptRepository.getAnswer(chatCompletion);
     if (answerChatLogContent === null || typeof answerChatLogContent !== 'string') {
       throw new Error();
     }
