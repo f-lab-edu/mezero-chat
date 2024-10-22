@@ -9,8 +9,7 @@ export default function ChatPage() {
   const router = useRouter();
 
   const onSubmit = (pChatLogContent: string) => {
-    const chatService = new ChatService();
-    const id = chatService.createChat(pChatLogContent);
+    const id = ChatService.createChat(pChatLogContent);
     router.push('/chat/' + id, { scroll: false });
   };
 
