@@ -14,18 +14,17 @@ export default function ChatDetailPage({ id }: { id: string }) {
   const [chatTitle, setChatTitle] = useState<string>('');
   const [chatLogList, setChatLogList] = useState<IChatLog[]>([]);
 
-  const chatService = new ChatService();
   const initChat = async (pId: string) => {
-    const chat = chatService.getChat(pId);
+    const chat = ChatService.getChat(pId);
     setChatLogList(chat.chatLogList);
 
     if (isLastChatLogFromUser(chat)) {
       setIsTyping(true);
-      const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(pId, chat.chatLogList);
+      const answerChatLogList: IChatLog[] = await ChatService.createAnswerChatLog(pId, chat.chatLogList);
       setChatLogList(answerChatLogList);
 
       if (createTitleFlag()) {
-        const newChatTitle = await chatService.updateChatTitle(pId, answerChatLogList);
+        const newChatTitle = await ChatService.updateChatTitle(pId, answerChatLogList);
         setChatTitle(newChatTitle);
       }
     }
@@ -44,13 +43,13 @@ export default function ChatDetailPage({ id }: { id: string }) {
 
   const onSubmit = async (pChatLogContent: string) => {
     setIsTyping(true);
-    const questionChatLogList: IChatLog[] = chatService.createQuestionChatLog(id, pChatLogContent);
+    const questionChatLogList: IChatLog[] = ChatService.createQuestionChatLog(id, pChatLogContent);
     setChatLogList(questionChatLogList);
-    const answerChatLogList: IChatLog[] = await chatService.createAnswerChatLog(id, questionChatLogList);
+    const answerChatLogList: IChatLog[] = await ChatService.createAnswerChatLog(id, questionChatLogList);
     setChatLogList(answerChatLogList);
 
     if (createTitleFlag()) {
-      const newChatTitle = await chatService.updateChatTitle(id, answerChatLogList);
+      const newChatTitle = await ChatService.updateChatTitle(id, answerChatLogList);
       setChatTitle(newChatTitle);
     }
     setIsTyping(false);
@@ -63,14 +62,14 @@ export default function ChatDetailPage({ id }: { id: string }) {
   return (
     <>
       <Sidebar chatId={id} />
-      <main className="min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300 lg:ml-72">
+      <main className="min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300 sm:ml-72">
         <ChatLayout>
           {chatLogList.map((chat, index) => (
             <ChatLog key={chat.content + index} role={chat.role} content={chat.content}></ChatLog>
           ))}
         </ChatLayout>
       </main>
-      <div className="transition-[margin-left] ease-in-out duration-300 lg:ml-72">
+      <div className="transition-[margin-left] ease-in-out duration-300 sm:ml-72">
         <div className="z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="mx-4 md:mx-8 flex h-14 items-center">
             <div className="flex-1 w-full max-w-2xl m-auto">
